@@ -1,0 +1,76 @@
+{% extends "registration/base.html" %}
+
+{% load i18n jazzy_tabler %}
+{% get_jazzy_settings request as jazzy_settings %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
+
+{% block content %}
+    <h2 class="h2 text-center mb-4">{{ jazzy_settings.welcome_sign }}</h2>
+
+    <form action="{{ app_path }}" method="post">
+        {% csrf_token %}
+
+        {% if user.is_authenticated %}
+            <div class="alert alert-warning" role="alert">
+                {% blocktrans trimmed %}
+                    You are authenticated as {{ username }}, but are not authorized to
+                    access this page. Would you like to login to a different account?
+                {% endblocktrans %}
+            </div>
+        {% endif %}
+
+        {% if form.errors %}
+            {% if form.username.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.username.label }}: {{ form.username.errors|join:', ' }}
+                </div>
+            {% endif %}
+            {% if form.password.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.password.label }}: {{ form.password.errors|join:', ' }}
+                </div>
+            {% endif %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {% for error in form.non_field_errors %}
+                        <p class="mb-0">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="form-label" for="id_username">{{ form.username.label }}</label>
+            <div class="input-icon">
+                <span class="input-icon-addon">
+                    <i class="fas fa-user"></i>
+                </span>
+                <input type="text" name="username" id="id_username" class="form-control" placeholder="{{ form.username.label }}" autocomplete="username" autofocus required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="id_password">
+                {{ form.password.label }}
+                {% url 'admin_password_reset' as password_reset_url %}
+                {% if password_reset_url %}
+                    <span class="form-label-description">
+                        <a href="{{ password_reset_url }}">{% trans 'Forgot password?' %}</a>
+                    </span>
+                {% endif %}
+            </label>
+            <div class="input-icon">
+                <span class="input-icon-addon">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <input type="password" name="password" id="id_password" class="form-control" placeholder="{{ form.password.label }}" autocomplete="current-password" required>
+            </div>
+        </div>
+
+        <div class="form-footer">
+            <button type="submit" class="btn {{ jazzy_ui.button_classes.primary }} w-100">
+                {% trans "Log in" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

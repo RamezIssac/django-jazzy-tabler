@@ -1,0 +1,128 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static jazzy_tabler %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block content_title %}{% trans 'Dashboard' %}{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item active">{% trans 'Dashboard' %}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    {% get_side_menu using="app_list" as dashboard_list %}
+    {% if dashboard_list %}
+        {% widthratio dashboard_list|length 2 1 as middle %}
+    {% endif %}
+
+    <div class="col-lg-9 col-12">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                {% for app in dashboard_list %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ app.name }}</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table table-vcenter card-table">
+                                <tbody>
+                                {% for model in app.models %}
+                                    <tr>
+                                        <td>
+                                            {% if model.url %}<a href="{{ model.url }}">{{ model.name }}</a>{% else %}{{ model.name }}{% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="btn-list">
+                                                {% if model.add_url %}
+                                                    <a href="{{ model.add_url }}" class="btn btn-sm {{ jazzy_ui.button_classes.success }}">{% trans 'Add' %}</a>
+                                                {% endif %}
+                                                {% if model.url %}
+                                                    {% if model.view_only %}
+                                                        <a href="{{ model.url }}" class="btn btn-sm {{ jazzy_ui.button_classes.info }}">{% trans 'View' %}</a>
+                                                    {% else %}
+                                                        <a href="{{ model.url }}" class="btn btn-sm {{ jazzy_ui.button_classes.info }}">{% if model.custom %}{% trans 'Go' %}{% else %}{% trans 'Change' %}{% endif %}</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if forloop.counter == middle|add:"0" %}
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-12">
+        <div id="content-related">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans 'Recent actions' %}</h3>
+                </div>
+                <div class="card-body">
+                    {% load log %}
+                    {% get_admin_log 6 as admin_log for_user user %}
+                    {% if not admin_log %}
+                        <p class="text-secondary">{% trans 'None available' %}</p>
+                    {% else %}
+                        <div class="list-group list-group-flush">
+                            {% for entry in admin_log %}
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex align-items-center">
+                                        <span class="avatar avatar-sm me-2 {% if entry.is_deletion %}bg-danger{% elif entry.is_addition %}bg-success{% else %}bg-azure{% endif %}">
+                                            {% if entry.is_change %}
+                                                <i class="fas fa-edit fa-xs"></i>
+                                            {% elif entry.is_deletion %}
+                                                <i class="fas fa-trash fa-xs"></i>
+                                            {% elif entry.is_addition %}
+                                                <i class="fas fa-plus fa-xs"></i>
+                                            {% endif %}
+                                        </span>
+                                        <div class="flex-fill">
+                                            <div class="small">
+                                                {% if entry.is_deletion or not entry.get_admin_url %}
+                                                    <strong>{{ entry.object_repr }}</strong>
+                                                {% else %}
+                                                    <a href="{{ entry.get_admin_url }}"><strong>{{ entry.object_repr }}</strong></a>
+                                                {% endif %}
+                                                {% if entry.model %}
+                                                    <span class="text-secondary">{% filter capfirst %}{{ entry.model }}{% endfilter %}</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-secondary small">
+                                                {% blocktrans with timesince=entry.action_time|timesince %}{{ timesince }} ago{% endblocktrans %}
+                                            </div>
+                                            {% if not entry.is_deletion %}
+                                                {% if entry.is_addition %}
+                                                    <div class="text-secondary small">{{ entry }}</div>
+                                                {% else %}
+                                                    {% action_message_to_list entry as action_message_list %}
+                                                    {% for action_message in action_message_list %}
+                                                        <div class="text-secondary small">{{ action_message.msg|style_bold_first_word }}</div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

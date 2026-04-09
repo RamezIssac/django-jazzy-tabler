@@ -1,0 +1,26 @@
+{% comment %}
+Collapsible (accordion) change form layout
+{% endcomment %}
+{% load i18n jazzy_tabler %}
+
+<div class="accordion" id="changeform-accordion">
+    {% for fieldset in sections %}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ fieldset.name|unicode_slugify }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+                {{ fieldset.name|default:_("General") }}
+            </button>
+        </h2>
+        <div id="collapse-{{ fieldset.name|unicode_slugify }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#changeform-accordion">
+            <div class="accordion-body">
+                {% if fieldset.is_inline %}
+                    {{ fieldset.formset.management_form }}
+                    {% include fieldset.formset.template %}
+                {% else %}
+                    {% include "admin/includes/fieldset.html" with heading=None %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
