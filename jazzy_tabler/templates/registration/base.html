@@ -1,0 +1,90 @@
+{% load i18n static jazzy_tabler admin_urls %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% get_jazzy_settings request as jazzy_settings %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <script>
+        (function() {
+            var mode = localStorage.getItem('jazzy-theme-mode') || '{{ jazzy_ui.default_theme_mode|default:"light" }}';
+            if (mode === 'auto') {
+                mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', mode);
+        })();
+    </script>
+
+    <title>{% block title %}{{ title }} | {{ jazzy_settings.site_title }}{% endblock %}</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static "vendor/fontawesome-free/css/all.min.css" %}">
+
+    <!-- Tabler CSS -->
+    {% if LANGUAGE_BIDI %}
+    <link rel="stylesheet" href="{% static "vendor/tabler/css/tabler.rtl.min.css" %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static "vendor/tabler/css/tabler.min.css" %}">
+    {% endif %}
+
+    <!-- Django-specific fixes -->
+    <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+
+    {% if jazzy_settings.custom_css %}
+    <link rel="stylesheet" href="{% static jazzy_settings.custom_css %}">
+    {% endif %}
+
+    {% if jazzy_settings.site_icon %}
+    <link rel="shortcut icon" href="{% static jazzy_settings.site_icon %}" type="image/png">
+    <link rel="icon" href="{% static jazzy_settings.site_icon %}" sizes="32x32" type="image/png">
+    {% endif %}
+
+    {% block extrastyle %}{% endblock %}
+    {% block extrahead %}{% endblock %}
+</head>
+<body class="d-flex flex-column">
+
+<div class="page page-center">
+    <div class="container container-tight py-4">
+
+        <div class="text-center mb-4">
+            {% if jazzy_settings.login_logo_dark %}
+                <a href="{% url 'admin:index' %}" class="login-logo">
+                    <img class="logo-light" src="{% static jazzy_settings.login_logo %}" alt="{{ jazzy_settings.site_header }}" height="36">
+                    <img class="logo-dark" src="{% static jazzy_settings.login_logo_dark %}" alt="{{ jazzy_settings.site_header }}" height="36">
+                </a>
+            {% elif jazzy_settings.login_logo %}
+                <a href="{% url 'admin:index' %}" class="login-logo">
+                    <img src="{% static jazzy_settings.login_logo %}" alt="{{ jazzy_settings.site_header }}" height="36">
+                </a>
+            {% else %}
+                <a href="{% url 'admin:index' %}" class="navbar-brand navbar-brand-autodark">
+                    <h1>{{ jazzy_settings.site_header }}</h1>
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="card card-md">
+            <div class="card-body">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="{% static "admin/js/vendor/jquery/jquery.js" %}"></script>
+<!-- Tabler JS -->
+<script src="{% static "vendor/tabler/js/tabler.min.js" %}"></script>
+
+{% if jazzy_settings.custom_js %}
+<script src="{% static jazzy_settings.custom_js %}"></script>
+{% endif %}
+
+</body>
+</html>

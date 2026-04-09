@@ -1,0 +1,27 @@
+{% comment %}
+Carousel change form layout
+{% endcomment %}
+{% load i18n jazzy_tabler %}
+
+<ul class="nav nav-tabs mb-3" role="tablist">
+    {% for fieldset in sections %}
+    <li class="nav-item" role="presentation">
+        <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#carousel-{{ fieldset.name|unicode_slugify }}" type="button" role="tab" {% if forloop.first %}aria-selected="true"{% endif %}>
+            {{ fieldset.name|default:_("General") }}
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+
+<div class="tab-content">
+    {% for fieldset in sections %}
+    <div class="tab-pane {% if forloop.first %}active show{% endif %}" id="carousel-{{ fieldset.name|unicode_slugify }}" role="tabpanel">
+        {% if fieldset.is_inline %}
+            {{ fieldset.formset.management_form }}
+            {% include fieldset.formset.template %}
+        {% else %}
+            {% include "admin/includes/fieldset.html" with heading=None %}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

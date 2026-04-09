@@ -1,0 +1,13 @@
+{% comment %}
+Single-page change form layout (no tabs)
+{% endcomment %}
+{% load i18n jazzy_tabler %}
+
+{% for fieldset in sections %}
+    {% if fieldset.is_inline %}
+        {{ fieldset.formset.management_form }}
+        {% include fieldset.formset.template %}
+    {% else %}
+        {% include "admin/includes/fieldset.html" with heading=fieldset.name %}
+    {% endif %}
+{% endfor %}
