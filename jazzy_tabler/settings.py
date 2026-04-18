@@ -123,7 +123,8 @@ def get_search_model_string(search_model: str) -> str:
 
 def get_settings() -> Dict[str, Any]:
     jazzy_settings = copy.deepcopy(DEFAULT_SETTINGS)
-    user_settings = {x: y for x, y in getattr(settings, "JAZZY_SETTINGS", {}).items() if y is not None}
+    user_jazzy_settings = getattr(settings, "JAZZY_SETTINGS", getattr(settings, "JAZZMIN_SETTINGS", {}))
+    user_settings = {x: y for x, y in user_jazzy_settings.items() if y is not None}
     jazzy_settings.update(user_settings)
 
     if jazzy_settings["search_model"]:

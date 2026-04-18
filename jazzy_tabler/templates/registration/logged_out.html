@@ -1,0 +1,17 @@
+{% extends "registration/base.html" %}
+
+{% load i18n jazzy_tabler %}
+{% get_jazzy_settings request as jazzy_settings %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
+
+{% block content %}
+    <h2 class="h2 text-center mb-4">{{ jazzy_settings.welcome_sign }}</h2>
+    <p class="text-center text-secondary">
+        {% trans "Thanks for spending some quality time with the web site today." %}
+    </p>
+    <div class="form-footer">
+        <a class="btn {{ jazzy_ui.button_classes.primary }} w-100" href="{% url 'admin:index' %}">
+            {% trans 'Log in again' %}
+        </a>
+    </div>
+{% endblock %}

@@ -40,3 +40,14 @@ include = ["jazzy_tabler"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["jazzy_tabler"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.8",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "demo.settings"
+python_files = ["test_*.py"]
+pythonpath = ["."]
