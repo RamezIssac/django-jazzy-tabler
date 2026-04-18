@@ -74,6 +74,7 @@
                         <div class="card">
                             <div class="card-body">
                                 {% get_changeform_template adminform as changeform_template %}
+                                {% get_sections adminform inline_admin_formsets as sections %}
                                 {% include changeform_template %}
                             </div>
                             {% if jazzy_settings.changeform_show_buttons_below %}

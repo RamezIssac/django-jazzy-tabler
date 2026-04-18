@@ -196,7 +196,7 @@
 
     <!-- Header (top navbar) -->
     <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none" {% if jazzy_ui.navbar_data_theme %}data-bs-theme="dark"{% endif %}>
-        <div class="container-xl">
+        <div class="container-fluid">
             <div class="navbar-nav flex-row">
                 {% if jazzy_settings.show_sidebar %}
                 <li class="nav-item">
@@ -341,7 +341,7 @@
         {% block page_content %}
             {% if not is_popup %}
             <div class="page-header d-print-none">
-                <div class="container-xl">
+                <div class="container-fluid">
                     <div class="row g-2 align-items-center">
                         <div class="col">
                             <h2 class="page-title">{% block content_title %}{% endblock %}</h2>
@@ -358,7 +358,7 @@
             {% endif %}
 
             <div class="page-body">
-                <div class="container-xl">
+                <div class="container-fluid">
                     {% block messages %}
                         {% for message in messages %}
                             {% if message.tags == 'success' %}
@@ -407,7 +407,7 @@
         {% block footer %}
         {% if not is_popup %}
         <footer class="footer footer-transparent d-print-none">
-            <div class="container-xl">
+            <div class="container-fluid">
                 <div class="row text-center align-items-center flex-row-reverse">
                     <div class="col-lg-auto ms-lg-auto">
                         <span class="text-secondary">
