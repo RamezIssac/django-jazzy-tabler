@@ -6,7 +6,7 @@ Single-page change form layout (no tabs)
 {% for fieldset in sections %}
     {% if fieldset.is_inline %}
         {{ fieldset.formset.management_form }}
-        {% include fieldset.formset.template %}
+        {% include fieldset.opts.template with inline_admin_formset=fieldset %}
     {% else %}
         {% include "admin/includes/fieldset.html" with heading=fieldset.name %}
     {% endif %}
