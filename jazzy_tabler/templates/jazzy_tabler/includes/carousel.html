@@ -18,7 +18,7 @@ Carousel change form layout
     <div class="tab-pane {% if forloop.first %}active show{% endif %}" id="carousel-{{ fieldset.name|unicode_slugify }}" role="tabpanel">
         {% if fieldset.is_inline %}
             {{ fieldset.formset.management_form }}
-            {% include fieldset.formset.template %}
+            {% include fieldset.opts.template with inline_admin_formset=fieldset %}
         {% else %}
             {% include "admin/includes/fieldset.html" with heading=None %}
         {% endif %}
