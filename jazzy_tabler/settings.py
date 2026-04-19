@@ -75,7 +75,7 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
     ###############
     "changeform_format": "horizontal_tabs",
     "changeform_format_overrides": {},
-    "changeform_show_buttons_below": False,
+    "changeform_show_buttons_below": True,
     # Add a language dropdown into the admin
     "language_chooser": False,
 }
