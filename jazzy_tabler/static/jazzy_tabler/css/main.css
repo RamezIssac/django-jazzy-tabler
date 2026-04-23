@@ -537,3 +537,11 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     margin-left: 0;
     padding-top: 1rem;
 }
+
+/*
+    AUTO COMPELTE
+ */
+    .select2.select2-container {
+        border:var(--tblr-border-width) solid var(--tblr-border-color) ;
+    }
+

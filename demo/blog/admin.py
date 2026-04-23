@@ -31,3 +31,4 @@ class PostAdmin(admin.ModelAdmin):
     list_display = ("title", "category", "published_at")
     list_filter = ("category", "published_at")
     search_fields = ("title", "body")
+    autocomplete_fields = ["category"]
