@@ -59,4 +59,8 @@ JAZZY_SETTINGS = {
     "site_header": "Jazzy Demo",
     "site_brand": "Jazzy Demo",
     "changeform_show_buttons_below": True,
+    "topmenu_links": [
+        {"name": "404 Preview", "url": "preview_404", "icon": "ti ti-error-404"},
+        {"name": "500 Preview", "url": "preview_500", "icon": "ti ti-bug"},
+    ],
 }
