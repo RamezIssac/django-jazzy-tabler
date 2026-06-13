@@ -1,0 +1,24 @@
+{% extends "registration/base.html" %}
+
+{% load i18n jazzy_tabler %}
+{% get_jazzy_settings request as jazzy_settings %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
+
+{% block title %}{% trans 'Logged out' %} | {{ jazzy_settings.site_title }}{% endblock %}
+
+{% block content %}
+    <div class="text-center mb-4">
+        <span class="avatar avatar-xl mb-3 bg-azure-lt">
+            <i class="ti ti-logout fs-1 text-azure"></i>
+        </span>
+        <h2 class="h2">{% trans 'Logged out' %}</h2>
+        <p class="text-secondary">
+            {% trans "You have been successfully logged out." %}
+        </p>
+    </div>
+    <div class="form-footer">
+        <a href="{% url 'admin:index' %}" class="btn {{ jazzy_ui.button_classes.primary }} w-100">
+            {% trans 'Log in again' %}
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Page not found' %}{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="container-xl">
+        <div class="page-pretitle">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container-xl">
+        <div class="page-body">
+            <div class="empty">
+                <div class="empty-header">404</div>
+                <p class="empty-title">{% trans 'Page not found' %}</p>
+                <p class="empty-subtitle text-secondary">
+                    {% trans "The page you were looking for doesn't exist or has been moved." %}
+                </p>
+                <div class="empty-action">
+                    <a href="{% url 'admin:index' %}" class="btn btn-primary">
+                        <i class="ti ti-arrow-left me-2"></i>
+                        {% trans 'Back to dashboard' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

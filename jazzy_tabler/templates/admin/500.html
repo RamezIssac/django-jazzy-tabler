@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Server error' %}{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="container-xl">
+        <div class="page-pretitle">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container-xl">
+        <div class="page-body">
+            <div class="empty">
+                <div class="empty-header">500</div>
+                <p class="empty-title">{% trans 'Internal server error' %}</p>
+                <p class="empty-subtitle text-secondary">
+                    {% trans "Something went wrong on our end. The error has been reported and we'll fix it as soon as possible." %}
+                </p>
+                <div class="empty-action">
+                    <a href="{% url 'admin:index' %}" class="btn btn-primary">
+                        <i class="ti ti-arrow-left me-2"></i>
+                        {% trans 'Back to dashboard' %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
