@@ -5,6 +5,7 @@ Single-page change form layout (no tabs)
 
 {% for fieldset in sections %}
     {% if fieldset.is_inline %}
+        <div class="hr-text my-3">{{ fieldset.name }}</div>
         {{ fieldset.formset.management_form }}
         {% include fieldset.opts.template with inline_admin_formset=fieldset %}
     {% else %}
