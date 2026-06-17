@@ -39,6 +39,13 @@
     {% if jazzy_settings.custom_css %}
         <link rel="stylesheet" href="{% static jazzy_settings.custom_css %}">
     {% endif %}
+    {% if jazzy_settings.hide_number_spinners %}
+        <style>
+            input[type=number]::-webkit-outer-spin-button,
+            input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+            input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+        </style>
+    {% endif %}
 
     {% if jazzy_settings.site_icon %}
         <link rel="shortcut icon" href="{% static jazzy_settings.site_icon %}" type="image/png">

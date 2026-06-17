@@ -38,7 +38,10 @@
                             </h3>
                             {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission and inline_admin_form.original %}
                                 <div class="card-actions delete">
-                                    {{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}
+                                    {{ inline_admin_form.deletion_field.field }}
+                                    <button type="button" class="btn btn-sm btn-outline-danger jazzy-delete-btn" title="{% trans "Delete" %}">
+                                        <i class="fas fa-trash-alt fa-sm"></i>
+                                    </button>
                                 </div>
                             {% endif %}
                         </div>
