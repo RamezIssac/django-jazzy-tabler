@@ -70,8 +70,10 @@ html[data-bs-theme="dark"] .login-logo .logo-dark { display: inline; }
 }
 
 .vLargeTextField {
-    height: auto;
+    height: 6rem;
     min-height: calc(2.25rem + 2px);
+    width: 100%;
+    resize: vertical;
 }
 
 /* Dark mode theming for bare inputs */
@@ -256,10 +258,23 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     color: var(--tblr-white);
 }
 
+.select2-container {
+    min-width: 8rem;
+}
+
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
+    min-height: calc(2.25rem + 2px);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: calc(2.25rem + 2px);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: calc(2.25rem + 2px);
 }
 
 /* ============================================================================
@@ -543,10 +558,7 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     padding-top: 1rem;
 }
 
-/*
-    AUTO COMPELTE
- */
-    .select2.select2-container {
-        border:var(--tblr-border-width) solid var(--tblr-border-color) ;
-    }
+.select2.select2-container {
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+}
 

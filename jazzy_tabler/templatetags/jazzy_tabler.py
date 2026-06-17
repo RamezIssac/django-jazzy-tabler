@@ -443,3 +443,19 @@ def style_bold_first_word(message: str) -> SafeText:
 @register.filter
 def unicode_slugify(message: str) -> str:
     return str(slugify(message, allow_unicode=True))
+
+
+@register.filter
+def str_replace(value: str, arg: str) -> str:
+    """Replace substring. Usage: {{ value|str_replace:"old|new" }}"""
+    try:
+        old, new = arg.split("|", 1)
+        return value.replace(old, new)
+    except (ValueError, AttributeError):
+        return value
+
+
+@register.simple_tag
+def get_jazzy_setting(key: str) -> Any:
+    """Read a single setting value. Safe to call from widget templates (no request needed)."""
+    return get_settings().get(key)

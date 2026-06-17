@@ -80,6 +80,8 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
     "language_chooser": False,
     # Hide browser up/down spinner arrows on number inputs
     "hide_number_spinners": True,
+    # Route the FK "view" icon to the entity view page instead of the change form
+    "related_view_links_to_view": True,
 }
 
 
