@@ -17,7 +17,7 @@
                             </th>
                         {% endif %}
                     {% endfor %}
-                    {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission %}<th>{% trans "Delete?" %}</th>{% endif %}
+                    {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission %}<th class="delete"></th>{% endif %}
                 </tr></thead>
 
                 <tbody>
@@ -84,7 +84,14 @@
                             {% endfor %}
                         {% endfor %}
                         {% if inline_admin_formset.formset.can_delete and inline_admin_formset.has_delete_permission %}
-                            <td class="delete">{% if inline_admin_form.original %}{{ inline_admin_form.deletion_field.field }}{% endif %}</td>
+                            <td class="delete">
+                                {% if inline_admin_form.original %}
+                                    {{ inline_admin_form.deletion_field.field }}
+                                    <button type="button" class="btn btn-sm btn-outline-danger jazzy-delete-btn" title="{% trans "Delete" %}">
+                                        <i class="fas fa-trash-alt fa-sm"></i>
+                                    </button>
+                                {% endif %}
+                            </td>
                         {% endif %}
                     </tr>
                 {% endfor %}

@@ -64,6 +64,18 @@
         $('select').not(noSelect2).select2({ width: '100%' });
     }
 
+    function styleInlineDeleteLinks() {
+        $('.inline-deletelink:not(.jazzy-styled)')
+            .addClass('jazzy-styled btn btn-sm btn-outline-danger ms-1')
+            .html('<i class="fas fa-trash-alt fa-sm"></i>');
+    }
+
+    function applyExistingDeleteState() {
+        $('input[type="checkbox"][name$="-DELETE"]:checked').each(function() {
+            $(this).closest('tr.form-row, div.panel.inline-related').hide();
+        });
+    }
+
     $(document).ready(function () {
         var $tabs = $('#content-main form .nav-tabs').first();
         var $collapsible = $('#content-main form #changeform-accordion');
@@ -76,6 +88,8 @@
         else if ($collapsible.length) { handleCollapsible($collapsible); }
 
         applySelect2();
+        styleInlineDeleteLinks();
+        applyExistingDeleteState();
 
         $('body').on('change', '.related-widget-wrapper select', function(e) {
             var event = $.Event('django:update-related');
@@ -84,8 +98,17 @@
                 updateRelatedObjectLinks(this);
             }
         });
+
+        $('body').on('click', '.jazzy-delete-btn', function() {
+            var $row = $(this).closest('tr.form-row, div.panel.inline-related');
+            $row.find('input[type="checkbox"][name$="-DELETE"]').prop('checked', true);
+            $row.hide();
+        });
     });
 
-    django.jQuery(document).on('formset:added', applySelect2);
+    django.jQuery(document).on('formset:added', function() {
+        styleInlineDeleteLinks();
+        applySelect2();
+    });
 
 })(jQuery);

@@ -78,6 +78,8 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
     "changeform_show_buttons_below": True,
     # Add a language dropdown into the admin
     "language_chooser": False,
+    # Hide browser up/down spinner arrows on number inputs
+    "hide_number_spinners": True,
 }
 
 

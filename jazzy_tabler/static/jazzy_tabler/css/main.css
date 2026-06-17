@@ -278,6 +278,11 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     padding: 0.5rem;
 }
 
+.inline-group .delete input[type="checkbox"] {
+    display: none !important;
+}
+
+
 /* ============================================================================
    HORIZONTAL SELECTORS - filter_horizontal / filter_vertical
    ========================================================================== */
