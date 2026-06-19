@@ -35,7 +35,7 @@
 
 {% block coltype %}flex{% endblock %}
 
-{% block page_actions %}{% endblock %}
+{% block page_actions %}{% change_list_object_tools %}{% endblock %}
 
 {% block content %}
 
@@ -75,11 +75,7 @@
                     {% endif %}
                 </form>
 
-                {% block object-tools %}
-                    {% block object-tools-items %}
-                        {% change_list_object_tools %}
-                    {% endblock %}
-                {% endblock %}
+                {% block object-tools %}{% endblock %}
             </div>
         </div>
     {% endblock %}
