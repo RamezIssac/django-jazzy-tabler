@@ -30,18 +30,21 @@
                     {{ opts.verbose_name_plural|capfirst }}
                 {% endif %}
             </li>
-            <li class="breadcrumb-item active">
-                {% if add %}
-                    {% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}
-                {% else %}
-                    {{ original|truncatewords:"18" }}
-                {% endif %}
-            </li>
         </ol>
     {% endblock %}
 {% endif %}
 
-{% block content_title %}{{ opts.verbose_name_plural|capfirst }}{% endblock %}
+{% block content_title %}
+    {% if add %}{% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+{% endblock %}
+
+{% block page_actions %}
+    {% if change %}
+        <div class="object-tools d-flex flex-wrap gap-2">
+            {% change_form_object_tools %}
+        </div>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -96,31 +99,12 @@
                             <div id="jazzy-actions">
                                 {% block submit_buttons_bottom %}
                                     {% submit_row %}
-                                    {% block object-tools %}
-                                        {% if change %}
-                                            {% if not is_popup %}
-                                                <div class="object-tools d-flex flex-wrap gap-2">
-                                                    {% block object-tools-items %}
-                                                        {% change_form_object_tools %}
-                                                        {% block extra_actions %}{% endblock %}
-                                                    {% endblock %}
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endblock %}
                                 {% endblock %}
                             </div>
                         </div>
                     {% else %}
                         <div class="card-footer jazzy-actions-bottom">
                             {% submit_row %}
-                            {% if change %}
-                                {% if not is_popup %}
-                                    <div class="object-tools d-flex flex-wrap gap-2">
-                                        {% change_form_object_tools %}
-                                    </div>
-                                {% endif %}
-                            {% endif %}
                         </div>
                     {% endif %}
             </div>

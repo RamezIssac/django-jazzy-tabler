@@ -353,14 +353,12 @@
             {% if not is_popup %}
                 <div class="page-header d-print-none">
                     <div class="container-fluid">
+                        {% block breadcrumbs %}{% endblock %}
                         <div class="row g-2 align-items-center">
                             <div class="col">
                                 <h2 class="page-title">{% block content_title %}{% endblock %}</h2>
                             </div>
                             <div class="col-auto ms-auto d-print-none">
-                                <div class="d-flex">
-                                    {% block breadcrumbs %}{% endblock %}
-                                </div>
                                 {% block page_actions %}{% endblock %}
                             </div>
                         </div>
