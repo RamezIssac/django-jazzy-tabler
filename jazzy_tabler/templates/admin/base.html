@@ -233,6 +233,7 @@
                     {% endfor %}
                 </div>
 
+                {% block topbar_search %}
                 {% if jazzy_settings.search_model %}
                     <div class="d-flex ms-auto">
                         {% for search_model in jazzy_settings.search_models_parsed %}
@@ -249,6 +250,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                {% endblock topbar_search %}
 
                 <div class="navbar-nav flex-row order-md-last">
                     {% if 'django.contrib.admindocs'|app_is_installed %}
