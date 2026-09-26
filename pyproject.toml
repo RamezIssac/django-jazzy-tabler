@@ -47,8 +47,14 @@ dev = [
     "pytest-django>=4.8",
     "selenium>=4.43.0",
 ]
+screenshots = [
+    "playwright>=1.40",
+]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "demo.settings"
 python_files = ["test_*.py"]
 pythonpath = ["."]
+markers = [
+    "screenshots: browser-based screenshot matrix and layout assertions (opt-in: JAZZY_SCREENSHOTS=1, needs the 'screenshots' dependency group)",
+]
