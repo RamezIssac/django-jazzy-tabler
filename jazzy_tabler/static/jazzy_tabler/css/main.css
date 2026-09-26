@@ -194,21 +194,49 @@ select:not(.form-select):not([multiple]):focus {
 }
 
 /* ============================================================================
-   DJANGO RELATED WIDGET
+   DJANGO RELATED WIDGET (FK add/change/view/delete links)
+   Icons are font glyphs (currentColor): theme-correct in light AND dark,
+   sized in proportion to the 38px inputs, vertically centred.
    ========================================================================== */
 .related-widget-wrapper {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    align-items: stretch;
+    gap: 0.375rem;
+    flex-wrap: nowrap;
 }
 
-.related-widget-wrapper .select2-container {
-    flex: 1;
+.related-widget-wrapper > select,
+.related-widget-wrapper > input,
+.related-widget-wrapper > .select2-container,
+.related-widget-wrapper > .selector {
+    flex: 1 1 auto;
     min-width: 0;
 }
 
-.related-widget-wrapper-link {
-    flex-shrink: 0;
+.related-widget-wrapper-link,
+.related-widget-wrapper > .related-lookup {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    color: var(--tblr-secondary-color);
+    border-radius: var(--tblr-border-radius);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+.related-widget-wrapper-link:hover,
+.related-widget-wrapper-link:focus,
+.related-widget-wrapper > .related-lookup:hover,
+.related-widget-wrapper > .related-lookup:focus {
+    color: var(--tblr-primary);
+    background-color: var(--tblr-bg-surface-secondary);
+}
+
+.related-widget-wrapper-link > i,
+.related-widget-wrapper > .related-lookup > i {
+    font-size: 0.8125rem;
+    line-height: 1;
 }
 
 /* ============================================================================
@@ -229,52 +257,143 @@ select:not(.form-select):not([multiple]):focus {
 }
 
 /* ============================================================================
-   SELECT2 - Theme support
+   SELECT2 - one layer covering both themes in use:
+   "default" (JazzySelect + change_form.js/change_list.js) and
+   "admin-autocomplete" (Django autocomplete_fields).
+   Double-class selectors win over select2.min.css / Django's autocomplete.css
+   without a single !important. Colors come from Tabler variables, so light
+   and dark mode both work from the same rules.
    ========================================================================== */
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--single,
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple {
-    background-color: var(--tblr-body-bg);
-    border-color: var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered,
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-dropdown {
-    background-color: var(--tblr-body-bg);
-    border-color: var(--tblr-border-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-results__option {
-    background-color: var(--tblr-body-bg);
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: var(--tblr-primary);
-    color: var(--tblr-white);
-}
-
 .select2-container {
     min-width: 8rem;
 }
 
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-selection--multiple {
+.select2-container--default.select2-container .select2-selection--single,
+.select2-container--default.select2-container .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple {
+    background-color: var(--tblr-bg-forms, var(--tblr-body-bg));
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
     min-height: calc(2.25rem + 2px);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
+.select2-container--default.select2-container .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single {
     height: calc(2.25rem + 2px);
+    display: flex;
+    align-items: center;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: calc(2.25rem + 2px);
+.select2-container--default.select2-container .select2-selection--single .select2-selection__rendered,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__rendered {
+    color: var(--tblr-body-color);
+    line-height: 1.5;
+    padding: 0 2rem 0 .75rem;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__placeholder,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__placeholder {
+    color: var(--tblr-secondary-color);
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__arrow,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    top: 0;
+    right: .5rem;
+    width: 1.25rem;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__arrow b,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--tblr-secondary-color) transparent transparent transparent;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__clear,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__clear {
+    color: var(--tblr-secondary-color);
+    font-size: 1rem;
+    line-height: 1;
+    margin-right: .375rem;
+}
+
+.select2-container--default.select2-container.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container.select2-container--open .select2-selection--single,
+.select2-container--default.select2-container.select2-container--focus .select2-selection--multiple,
+.select2-container--default.select2-container.select2-container--open .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container.select2-container--focus .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container.select2-container--open .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container.select2-container--focus .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container.select2-container--open .select2-selection--multiple {
+    border-color: var(--tblr-primary);
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(var(--tblr-primary-rgb), .25);
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__rendered,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__rendered {
+    padding: 0 .375rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__choice,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--tblr-bg-surface-secondary);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
+    padding: .125rem .5rem;
+    margin-top: .25rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__choice__remove,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__choice__remove {
+    color: var(--tblr-secondary-color);
+    margin-right: .375rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-search__field,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-search__field {
+    background-color: transparent;
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default .select2-dropdown,
+.select2-container--admin-autocomplete .select2-dropdown,
+.select2-dropdown {
+    background-color: var(--tblr-bg-surface);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    box-shadow: var(--tblr-shadow-sm);
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default.select2-container .select2-search--dropdown .select2-search__field,
+.select2-container--admin-autocomplete.select2-container .select2-search--dropdown .select2-search__field {
+    background-color: var(--tblr-bg-forms, var(--tblr-body-bg));
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
+    padding: .375rem .75rem;
+}
+
+.select2-container--default.select2-container .select2-results__option,
+.select2-container--admin-autocomplete.select2-container .select2-results__option {
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default.select2-container .select2-results__option--highlighted.select2-results__option--selectable,
+.select2-container--admin-autocomplete.select2-container .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: var(--tblr-primary);
+    color: #fff;
+}
+
+.select2-container--default.select2-container .select2-results__option--selected,
+.select2-container--admin-autocomplete.select2-container .select2-results__option--selected {
+    background-color: var(--tblr-bg-surface-secondary);
+    color: var(--tblr-body-color);
 }
 
 /* ============================================================================
@@ -556,9 +675,5 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 .popup .page-wrapper {
     margin-left: 0;
     padding-top: 1rem;
-}
-
-.select2.select2-container {
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
 }
 
