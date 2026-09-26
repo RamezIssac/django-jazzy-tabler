@@ -71,6 +71,24 @@ def test_changeform_submit_buttons_below_when_enabled(admin_client):
 
 
 @pytest.mark.django_db
+def test_related_widget_icons_are_theme_font_glyphs(admin_client):
+    """FK related-object links are inline FontAwesome glyphs (currentColor),
+    not <img> SVGs with hardcoded colors that ignore the theme."""
+    import re
+
+    response = admin_client.get("/admin/blog/post/add/")
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    wrappers = re.findall(r'<div class="related-widget-wrapper".*?</div>', content, re.S)
+    assert wrappers, "expected related-widget-wrapper markup on the post form"
+    for wrapper in wrappers:
+        assert "<img" not in wrapper, "related links must not use <img> icons"
+    for css_class in ("fa-plus", "fa-pen", "fa-xmark", "fa-eye"):
+        assert f'"fas {css_class}"' in content
+
+
+@pytest.mark.django_db
 def test_changeform_renders_tabular_inline_formset(admin_client):
     category = Category.objects.create(name="News")
     Post.objects.create(title="Hello world", body="Body text", category=category)
