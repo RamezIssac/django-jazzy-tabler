@@ -220,3 +220,36 @@ def test_inline_empty_form_not_select2ified_and_added_rows_are(page, demo_server
     for row in result["rows"]:
         assert row["select2_init"] is True, row
         assert row["containers"] == 1, row
+
+
+def test_selector_chooser_buttons(page, demo_server):
+    """filter_horizontal chooser (Django >= 5 JS-built <button> markup):
+    compact icon boxes in a narrow middle column, titled boxes, no raw text."""
+    page.goto(f"{demo_server.base_url}/admin/auth/group/1/change/", wait_until="networkidle")
+    page.wait_for_selector(".selector ul.selector-chooser")
+
+    buttons = page.locator(".selector .selector-chooser button")
+    assert buttons.count() == 2  # add + remove
+    for i in range(buttons.count()):
+        box = buttons.nth(i).bounding_box()
+        assert box is not None
+        assert abs(box["width"] - 32) < 2, f"chooser button {i} width {box['width']} (raw text leaking?)"
+        assert abs(box["height"] - 32) < 2, f"chooser button {i} height {box['height']}"
+        glyph = buttons.nth(i).evaluate(
+            "el => getComputedStyle(el, '::before').getPropertyValue('content')"
+        )
+        assert glyph not in ("none", "normal", ""), f"chooser button {i} missing icon glyph"
+
+    chooser_w = page.locator(".selector ul.selector-chooser").bounding_box()["width"]
+    assert chooser_w < 48, f"chooser column too wide: {chooser_w}px"
+
+    title = page.locator(".selector .selector-available-title").first
+    assert title.is_visible()
+    radius = title.evaluate("el => getComputedStyle(el).borderTopLeftRadius")
+    assert float(radius.replace("px", "")) > 0, "selector title bar not themed"
+
+    # choose-all lives in the title bar as a small quiet action
+    chooseall = page.locator(".selector .selector-chooseall").first
+    assert chooseall.is_visible()
+    ca_h = chooseall.bounding_box()["height"]
+    assert ca_h < 28, f"choose-all should be a small action, got {ca_h}px tall"
