@@ -41,6 +41,19 @@ def test_history_pages_have_entries(seeded, admin_client):
 
 
 @pytest.mark.django_db
+def test_error_pages_have_no_admin_chrome(seeded, admin_client):
+    """404/500 are standalone pages: no sidebar/navbar, only go-back + main page."""
+    for url, status in (("/preview/404/", 404), ("/preview/500/", 500)):
+        response = admin_client.get(url)
+        assert response.status_code == status
+        content = response.content.decode()
+        assert "navbar-vertical" not in content, url
+        assert "jazzy-sidebar" not in content, url
+        assert "Go back" in content, url
+        assert "Main page" in content, url
+
+
+@pytest.mark.django_db
 def test_admin_logout_via_post(seeded, admin_client):
     """Logout is POST-only in modern Django; the logged-out screen must render."""
     response = admin_client.post("/admin/logout/")
