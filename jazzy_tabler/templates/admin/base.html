@@ -37,6 +37,13 @@
     <!-- Django-specific fixes -->
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
 
+    {% if jazzy_ui.accent_color and jazzy_ui.accent_color != "primary" %}
+        <style>
+            #jazzy-sidebar .nav-link.active,
+            #jazzy-sidebar .dropdown-item.active { color: var(--tblr-{{ jazzy_ui.accent_color }}); }
+        </style>
+    {% endif %}
+
     {% if jazzy_settings.custom_css %}
         <link rel="stylesheet" href="{% static jazzy_settings.custom_css %}">
     {% endif %}
