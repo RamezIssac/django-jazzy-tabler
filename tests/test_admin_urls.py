@@ -14,7 +14,7 @@ MIN_INVENTORY_PAGES = 45  # sanity guard: the inventory must actually cover the 
 
 
 @pytest.mark.django_db
-def test_all_admin_urls_render(admin_client, seeded):
+def test_all_admin_urls_render(seeded, admin_client):
     anonymous_client = Client()
     pages = build_inventory()
     assert len(pages) >= MIN_INVENTORY_PAGES, f"inventory shrank unexpectedly: {len(pages)} pages"
@@ -31,7 +31,17 @@ def test_all_admin_urls_render(admin_client, seeded):
 
 
 @pytest.mark.django_db
-def test_admin_logout_via_post(admin_client, seeded):
+def test_history_pages_have_entries(seeded, admin_client):
+    """The screenshot matrix reviews history pages — they must never be empty."""
+    history_pages = [p for p in build_inventory() if p.slug.endswith("-history")]
+    assert history_pages
+    for page in history_pages:
+        content = admin_client.get(page.url).content.decode()
+        assert "list-group-item" in content, f"history page has no entries: {page.slug}"
+
+
+@pytest.mark.django_db
+def test_admin_logout_via_post(seeded, admin_client):
     """Logout is POST-only in modern Django; the logged-out screen must render."""
     response = admin_client.post("/admin/logout/")
     assert response.status_code == 200

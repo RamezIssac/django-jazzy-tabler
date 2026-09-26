@@ -523,6 +523,8 @@ select:not(.form-select):not([multiple]):focus {
 
 /* ============================================================================
    ACTIONS PANEL - Detail page sidebar
+   Buttons use plain Tabler .btn classes (same family as the rest of the UI);
+   this section only handles layout.
    ========================================================================== */
 #jazzy-actions {
     position: sticky;
@@ -536,27 +538,6 @@ select:not(.form-select):not([multiple]):focus {
 #jazzy-actions .d-flex .btn,
 #jazzy-actions .d-flex input[type="submit"] {
     width: 100%;
-}
-
-#jazzy-actions .object-tools {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 0 0;
-}
-
-#jazzy-actions .object-tools li a {
-    display: block;
-    padding: .25rem .5rem;
-    font-size: var(--tblr-body-font-size, 0.875rem);
-    text-align: center;
-    border-radius: var(--tblr-border-radius);
-    background-color: var(--tblr-bg-surface);
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-#jazzy-actions .object-tools li a:hover {
-    background-color: var(--tblr-bg-surface-secondary);
 }
 
 .jazzy-actions-bottom {
@@ -576,31 +557,18 @@ select:not(.form-select):not([multiple]):focus {
     width: auto;
 }
 
-.jazzy-actions-bottom .object-tools {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
+/* ============================================================================
+   PAGE HEADER RHYTHM
+   The title belongs to its content: breathe away from the breadcrumbs and
+   sit tighter above the page body (Tabler's default 1.5rem top gap splits
+   the header from what it heads).
+   ========================================================================== */
+.page-header .breadcrumb {
+    margin-bottom: .375rem;
 }
 
-.jazzy-actions-bottom .object-tools li {
-    margin: 0;
-}
-
-.jazzy-actions-bottom .object-tools li a {
-    display: inline-block;
-    padding: .25rem .5rem;
-    font-size: var(--tblr-body-font-size, 0.875rem);
-    border-radius: var(--tblr-border-radius);
-    background-color: var(--tblr-bg-surface);
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-.jazzy-actions-bottom .object-tools li a:hover {
-    background-color: var(--tblr-bg-surface-secondary);
+.page-body {
+    margin-top: calc(var(--tblr-page-padding, 1.5rem) / 2);
 }
 
 /* ============================================================================

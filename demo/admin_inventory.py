@@ -23,6 +23,7 @@ class Page:
     name: str  # human-readable label
     expected_status: int = 200
     anonymous: bool = False  # fetch without an authenticated session
+    screenshot: bool = True  # include in the screenshot matrix (URL suite always covers all)
 
 
 def _changelist_extras(model, model_admin, prefix: str, changelist_url: str) -> list[Page]:
@@ -81,7 +82,7 @@ def _changelist_extras(model, model_admin, prefix: str, changelist_url: str) -> 
             url = f"{changelist_url}?{entry}__year={dt.year}"
         else:
             continue
-        extras.append(Page(f"{prefix}-changelist-filter-{entry}", url, f"{prefix} changelist (filter: {entry})"))
+        extras.append(Page(f"{prefix}-changelist-filter-{entry}", url, f"{prefix} changelist (filter: {entry})", screenshot=False))
 
     return extras
 

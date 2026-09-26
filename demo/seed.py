@@ -88,16 +88,24 @@ def seed(create_superuser: bool = False, verbosity: int = 1) -> dict:
     )
     editor.groups.add(editors)
 
-    post_ct = ContentType.objects.get_for_model(Post)
-    for post in posts[:10]:
+    def log(obj, message, flag=CHANGE):
         LogEntry.objects.create(
             user_id=editor.pk,
-            content_type_id=post_ct.pk,
-            object_id=str(post.pk),
-            object_repr=str(post),
-            action_flag=CHANGE,
-            change_message="Seeded change for the demo dashboard and history views.",
+            content_type_id=ContentType.objects.get_for_model(obj).pk,
+            object_id=str(obj.pk),
+            object_repr=str(obj),
+            action_flag=flag,
+            change_message=message,
         )
+
+    for post in posts[:10]:
+        log(post, "Seeded change for the demo dashboard and history views.")
+    # a couple of structured messages so the history view renders parsed entries too
+    log(posts[0], '[{"changed": {"fields": ["title", "status"]}}]')
+    log(posts[0], '[{"changed": {"fields": ["body"]}}]')
+    # every inventoried history page (first object per model) gets an entry
+    for obj in (categories[0], tags[0], authors[0], editors, editor):
+        log(obj, "Seeded change so the history view has entries.")
 
     if create_superuser:
         import os

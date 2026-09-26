@@ -91,3 +91,37 @@ def test_light_theme_mode_applies(demo_server, browser):
     channels = [int(c) for c in bg.removeprefix("rgb(").removeprefix("rgba(").removesuffix(")").split(",")][:3]
     assert all(c > 200 for c in channels), f"expected light body background, got {bg}"
     context.close()
+
+
+def test_page_title_groups_with_content(page, demo_server):
+    """The page title must sit closer to its content than to the breadcrumbs."""
+    page.goto(f"{demo_server.base_url}/admin/blog/post/", wait_until="networkidle")
+
+    crumb = page.locator(".page-header .breadcrumb").first.bounding_box()
+    title = page.locator(".page-header .page-title").bounding_box()
+    body = page.locator(".page-body").bounding_box()
+    assert crumb and title and body
+
+    crumb_gap = title["y"] - (crumb["y"] + crumb["height"])
+    content_gap = body["y"] - (title["y"] + title["height"])
+    assert crumb_gap >= 6, f"title too close to breadcrumbs: {crumb_gap}px"
+    assert content_gap <= 18, f"title too far from content: {content_gap}px"
+    assert content_gap <= crumb_gap + 6, (
+        f"title should group with content (crumb gap {crumb_gap}px, content gap {content_gap}px)"
+    )
+
+
+def test_submit_buttons_match_theme_button_family(page, demo_server):
+    """Submit-row buttons and the changelist Add button must be one family."""
+    page.goto(f"{demo_server.base_url}/admin/blog/post/1/change/", wait_until="networkidle")
+    save = page.locator("input[name=_save]")
+    save_h = save.bounding_box()["height"]
+    save_fs = save.evaluate("el => getComputedStyle(el).fontSize")
+
+    page.goto(f"{demo_server.base_url}/admin/blog/post/", wait_until="networkidle")
+    add = page.locator(".page-header a[href$='/add/']").first
+    add_h = add.bounding_box()["height"]
+    add_fs = add.evaluate("el => getComputedStyle(el).fontSize")
+
+    assert abs(save_h - add_h) < 2, f"save {save_h}px vs add {add_h}px"
+    assert save_fs == add_fs, f"save font {save_fs} vs add font {add_fs}"

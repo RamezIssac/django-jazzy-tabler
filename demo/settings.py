@@ -75,3 +75,8 @@ JAZZY_SETTINGS = {
         {"name": "500 Preview", "url": "preview_500", "icon": "fas fa-bug"},
     ],
 }
+
+# Screenshot matrix variant: DEMO_CHANGEFORM_FORMAT=single captures the stacked layout.
+_changeform_format = os.environ.get("DEMO_CHANGEFORM_FORMAT")
+if _changeform_format:
+    JAZZY_SETTINGS["changeform_format"] = _changeform_format
