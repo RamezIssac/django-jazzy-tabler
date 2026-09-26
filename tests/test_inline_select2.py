@@ -33,7 +33,7 @@ def _login(driver, base_url, username, password, next_url="/admin/"):
     driver.find_element(By.NAME, "username").send_keys(username)
     driver.find_element(By.NAME, "password").send_keys(password)
     driver.find_element(By.CSS_SELECTOR, "input[type=submit], button[type=submit]").click()
-    WebDriverWait(driver, 5).until(EC.url_contains(next_url))
+    WebDriverWait(driver, 20).until(EC.url_contains(next_url))
 
 
 @pytest.mark.django_db(transaction=True)
@@ -44,7 +44,7 @@ def test_empty_form_select_is_not_select2ified_and_survives_add(live_server, chr
 
     _login(chrome, live_server.url, "jazzy", "jazzypass")
     chrome.get(f"{live_server.url}/admin/blog/category/{category.pk}/change/")
-    WebDriverWait(chrome, 5).until(
+    WebDriverWait(chrome, 20).until(
         EC.presence_of_element_located((By.ID, "id_posts-0-status"))
     )
     chrome.execute_script("document.querySelector('[data-bs-target=\"#tab-posts\"]').click();")

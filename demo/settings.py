@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +44,8 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "demo.sqlite3",
+        # DEMO_DATABASE lets the screenshot matrix run against a throwaway DB.
+        "NAME": os.environ.get("DEMO_DATABASE", BASE_DIR / "demo.sqlite3"),
         "TEST": {"NAME": ":memory:"},
     }
 }
@@ -58,9 +60,18 @@ JAZZY_SETTINGS = {
     "site_title": "Demo Admin",
     "site_header": "Jazzy Demo",
     "site_brand": "Jazzy Demo",
+    "search_model": "blog.post",
     "changeform_show_buttons_below": True,
+    "icons": {
+        "blog": "fas fa-newspaper",
+        "blog.post": "fas fa-file-alt",
+        "blog.category": "fas fa-folder-open",
+        "blog.tag": "fas fa-tags",
+        "blog.author": "fas fa-user-edit",
+        "blog.comment": "fas fa-comments",
+    },
     "topmenu_links": [
-        {"name": "404 Preview", "url": "preview_404", "icon": "ti ti-error-404"},
-        {"name": "500 Preview", "url": "preview_500", "icon": "ti ti-bug"},
+        {"name": "404 Preview", "url": "preview_404", "icon": "fas fa-exclamation-triangle"},
+        {"name": "500 Preview", "url": "preview_500", "icon": "fas fa-bug"},
     ],
 }

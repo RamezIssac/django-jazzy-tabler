@@ -37,7 +37,19 @@ def test_changeform_renders_for_edit(admin_client):
 
 @pytest.mark.django_db
 @override_settings(JAZZY_SETTINGS={})
-def test_changeform_submit_buttons_default_to_sidebar(admin_client):
+def test_changeform_submit_buttons_below_by_default(admin_client):
+    """The shipped default renders the submit row below the form (card footer)."""
+    response = admin_client.get("/admin/blog/post/add/")
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert "jazzy-actions-bottom" in content
+    assert 'id="jazzy-actions"' not in content
+
+
+@pytest.mark.django_db
+@override_settings(JAZZY_SETTINGS={"changeform_show_buttons_below": False})
+def test_changeform_submit_buttons_in_sidebar_when_disabled(admin_client):
     response = admin_client.get("/admin/blog/post/add/")
 
     assert response.status_code == 200
