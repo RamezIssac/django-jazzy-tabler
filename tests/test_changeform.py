@@ -89,6 +89,22 @@ def test_related_widget_icons_are_theme_font_glyphs(admin_client):
 
 
 @pytest.mark.django_db
+def test_inline_management_form_rendered_exactly_once(admin_client):
+    """Regression: the changeform layout includes used to render
+    formset.management_form AND include the inline template (which renders it
+    again), producing duplicate #id_*-TOTAL_FORMS elements."""
+    category = Category.objects.create(name="News")
+    Post.objects.create(title="Hello world", body="Body text", category=category)
+
+    response = admin_client.get(f"/admin/blog/category/{category.pk}/change/")
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert content.count('name="posts-TOTAL_FORMS"') == 1
+    assert content.count('id="id_posts-TOTAL_FORMS"') == 1
+
+
+@pytest.mark.django_db
 def test_changeform_renders_tabular_inline_formset(admin_client):
     category = Category.objects.create(name="News")
     Post.objects.create(title="Hello world", body="Body text", category=category)

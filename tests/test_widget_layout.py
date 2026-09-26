@@ -169,3 +169,54 @@ def test_select2_dark_mode_colors(demo_server, browser):
     dd_bg = page.locator(".select2-dropdown").evaluate("el => getComputedStyle(el).backgroundColor")
     assert all(c < 80 for c in _channels(dd_bg)), f"dark dropdown bg too bright: {dd_bg}"
     context.close()
+
+
+def test_inline_empty_form_not_select2ified_and_added_rows_are(page, demo_server):
+    """Tabular inline: the hidden __prefix__ template form must stay a plain
+    <select>, while rows added via 'Add another' get select2 exactly once.
+    (Ported from the old selenium test — the live_server + in-memory sqlite
+    combination raced and flaked; the seeded demo server is deterministic.)"""
+    page.goto(f"{demo_server.base_url}/admin/blog/category/1/change/", wait_until="networkidle")
+    page.click('[data-bs-target="#tab-posts"]')
+
+    empty = page.evaluate(
+        """() => {
+            const sel = document.querySelector('#posts-group .empty-form select[id*=__prefix__]');
+            if (!sel) return {count: 0};
+            return {
+                count: 1,
+                has_select2: sel.classList.contains('select2-hidden-accessible'),
+                sibling_container: sel.parentElement.querySelectorAll('.select2-container').length,
+            };
+        }"""
+    )
+    assert empty["count"] == 1, empty
+    assert empty["has_select2"] is False, "empty-form select must not be Select2-ified"
+    assert empty["sibling_container"] == 0, "empty-form select must have no select2 container"
+
+    initial_total = int(page.locator("#id_posts-TOTAL_FORMS").input_value())
+
+    page.locator("#posts-group .add-row a").click()
+    page.locator("#posts-group .add-row a").click()
+
+    result = page.evaluate(
+        """() => {
+            const total = parseInt(document.querySelector('#id_posts-TOTAL_FORMS').value, 10);
+            const rows = [];
+            for (let i = 0; i < total; i++) {
+                const s = document.querySelector('#id_posts-' + i + '-status');
+                if (!s) continue;
+                rows.push({
+                    idx: i,
+                    select2_init: s.classList.contains('select2-hidden-accessible'),
+                    containers: s.parentElement.querySelectorAll('.select2-container').length,
+                });
+            }
+            return {total, rows};
+        }"""
+    )
+    assert result["total"] == initial_total + 2, result
+    assert len(result["rows"]) == result["total"], result
+    for row in result["rows"]:
+        assert row["select2_init"] is True, row
+        assert row["containers"] == 1, row
