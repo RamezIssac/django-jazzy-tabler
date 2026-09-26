@@ -1,4 +1,4 @@
-"""Coverage matrix, layer 2: screenshots of every inventoried admin URL.
+"""Coverage matrix, layer 2: screenshots of the admin pages the theme renders.
 
 Opt-in browser pass (Playwright/Chromium). Run it with:
 
@@ -7,8 +7,15 @@ Opt-in browser pass (Playwright/Chromium). Run it with:
     JAZZY_SCREENSHOTS=1 uv run pytest tests/test_screenshots.py
 
 Output lands in ``proofs/<run>/`` (run name via ``JAZZY_PROOFS_RUN``, default
-``latest``): ``light/`` and ``dark/`` PNGs plus ``manifest.json`` and an
-``index.html`` review page.
+``latest``): ``light/`` + ``dark/`` PNGs, a machine-readable ``manifest.json``,
+and an ``index.html`` review site (4-column inline grid, titles = page slugs).
+
+Matrix shape (per captain's review):
+- light: the full inventory, minus noisy filter variants (those stay covered
+  by the always-on URL suite), plus interaction shots and the stacked
+  (changeform_format=single) change-form variant
+- dark: the main pages only — index, changelist, change form
+- the 404/500 previews stay in the matrix so their templates are reviewable
 
 HARD RULE for agents: screenshots are handled by filesystem path only. Never
 open/read the PNG files themselves; verify captures via file existence/size
@@ -30,12 +37,19 @@ from .conftest import (
 
 pytestmark = [pytest.mark.screenshots, requires_screenshots]
 
-THEME_MODES = ("light", "dark")
-
 PROOFS_ROOT = Path("proofs")
 RUN = os.environ.get("JAZZY_PROOFS_RUN", "latest")
 
-# Interactive states worth capturing on top of the plain URL inventory.
+# Dark mode: main pages only.
+DARK_SLUGS = {"index", "blog-post-changelist", "blog-post-change"}
+
+# Stacked (changeform_format=single) variants captured against stacked_server.
+STACKED_PAGES = [
+    ("/admin/blog/post/add/", "blog-post-add-stacked", "Post add — stacked layout"),
+    (None, "blog-post-change-stacked", "Post change — stacked layout"),  # url from inventory
+]
+
+# Interactive states worth capturing on top of the plain URL inventory (light).
 INTERACTION_SHOTS = [
     {
         "slug": "blog-post-add-select2-category-open",
@@ -89,107 +103,145 @@ def _run_action(page, action: str):
         raise ValueError(f"unknown action {action}")
 
 
+def _capture(page, tap, base_url, slug, url, name, expected_status, out_dir, manifest, mode):
+    record = {"mode": mode, "slug": slug, "url": url, "name": name, "console_errors": []}
+    tap.record = record
+    response = page.goto(f"{base_url}{url}", wait_until="networkidle")
+    status = response.status if response is not None else 0
+    record["status"] = status
+    assert status == expected_status, f"[{mode}] {slug}: {url} -> {status} (expected {expected_status})"
+    assert page.evaluate("document.documentElement.getAttribute('data-bs-theme')") == mode
+    record.update(_shot(page, out_dir, slug))
+    assert record["bytes"] > 10_000, f"[{mode}] {slug}: suspiciously small screenshot"
+    manifest.append(record)
+    tap.record = None
+    return record
+
+
 def _capture_inventory(page, tap, base_url, inventory, out_dir, manifest, mode):
     for entry in inventory:
-        record = {"mode": mode, **{k: entry[k] for k in ("slug", "url", "name")}, "console_errors": []}
-        tap.record = record
-
-        response = page.goto(f"{base_url}{entry['url']}", wait_until="networkidle")
-        status = response.status if response is not None else 0
-        record["status"] = status
-        assert status == entry["expected_status"], (
-            f"[{mode}] {entry['slug']}: {entry['url']} -> {status} (expected {entry['expected_status']})"
+        _capture(
+            page, tap, base_url,
+            entry["slug"], entry["url"], entry["name"], entry["expected_status"],
+            out_dir, manifest, mode,
         )
-        assert page.evaluate("document.documentElement.getAttribute('data-bs-theme')") == mode
-
-        record.update(_shot(page, out_dir, entry["slug"]))
-        assert record["bytes"] > 10_000, f"[{mode}] {entry['slug']}: suspiciously small screenshot"
-        manifest.append(record)
-        tap.record = None
 
 
 def _capture_logout(page, base_url, out_dir, manifest, mode):
-    record = {"mode": mode, "slug": "logout", "url": "/admin/logout/", "name": "Logged out", "console_errors": []}
     page.goto(f"{base_url}/admin/", wait_until="networkidle")
     page.click("header a[aria-label='Account']")
     with page.expect_navigation():
         page.click("#logout-form button[type=submit]")
-    record["status"] = 200
+    record = {"mode": mode, "slug": "logout", "url": "/admin/logout/", "name": "Logged out",
+              "status": 200, "console_errors": []}
     record.update(_shot(page, out_dir, "logout"))
     manifest.append(record)
 
 
 def _write_review_index(run_dir: Path, manifest: list[dict], run: str):
     import html
+    from collections import OrderedDict
 
-    rows = []
+    def grid(entries):
+        figures = []
+        for entry in entries:
+            rel = Path(entry["file"]).relative_to(run_dir)
+            warn = f" <span class='warn'>⚠ console: {html.escape('; '.join(entry['console_errors']))}</span>" if entry["console_errors"] else ""
+            figures.append(
+                "<figure>"
+                f"<figcaption><code>{html.escape(entry['slug'])}</code>"
+                f"<span class='meta'>{entry.get('status', '')} · {entry['bytes']:,} B</span>{warn}</figcaption>"
+                f"<a href=\"{rel}\"><img loading=\"lazy\" src=\"{rel}\" alt=\"{html.escape(entry['name'])}\"></a>"
+                "</figure>"
+            )
+        return f"<div class='grid'>{''.join(figures)}</div>"
+
+    by_mode: dict[str, list] = OrderedDict((mode, []) for mode in ("light", "dark"))
     for entry in manifest:
-        rel = Path(entry["file"]).relative_to(run_dir)
-        errors = "; ".join(entry["console_errors"])
-        rows.append(
-            "<tr>"
-            f"<td><code>{html.escape(entry['slug'])}</code></td>"
-            f"<td>{html.escape(entry['name'])}</td>"
-            f"<td><a href=\"{html.escape(entry['url'])}\">{html.escape(entry['url'])}</a></td>"
-            f"<td>{entry['mode']}</td>"
-            f"<td>{entry.get('status', '')}</td>"
-            f"<td>{entry['bytes']:,}</td>"
-            f"<td><a href=\"{rel}\">png</a></td>"
-            f"<td>{'⚠️ ' + html.escape(errors) if errors else ''}</td>"
-            "</tr>"
-        )
-    modes = ", ".join(THEME_MODES)
+        by_mode.setdefault(entry["mode"], []).append(entry)
+
+    sections = []
+    titles = {"light": "Light — full matrix", "dark": "Dark — main pages"}
+    for mode, entries in by_mode.items():
+        sections.append(f"<h2>{titles.get(mode, mode)} <span class='meta'>({len(entries)} pages)</span></h2>{grid(entries)}")
+
     page = f"""<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>jazzy-tabler proofs — {html.escape(run)}</title>
+<html><head><meta charset="utf-8"><title>jazzy-tabler matrix — {html.escape(run)}</title>
 <style>
-body {{ font-family: system-ui, sans-serif; margin: 2rem; color: #1f2937; }}
-table {{ border-collapse: collapse; width: 100%; font-size: 0.9rem; }}
-th, td {{ border: 1px solid #d1d5db; padding: 0.35rem 0.6rem; text-align: left; }}
-th {{ background: #f3f4f6; }}
+body {{ font-family: system-ui, sans-serif; margin: 1.5rem; color: #1f2937; background: #f9fafb; }}
+h1 {{ font-size: 1.4rem; }} h2 {{ font-size: 1.1rem; margin-top: 2rem; }}
+.meta {{ color: #6b7280; font-weight: 400; font-size: 0.75rem; margin-left: .5rem; }}
+.warn {{ color: #b45309; font-size: 0.75rem; display: block; }}
+.grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }}
+figure {{ margin: 0; }}
+figcaption {{ font-size: 0.78rem; margin-bottom: 0.3rem; }}
+figure img {{ width: 100%; border: 1px solid #d1d5db; border-radius: 6px; background: #fff; }}
+code {{ background: #eef2f7; padding: 0.05rem 0.3rem; border-radius: 4px; }}
 </style></head><body>
-<h1>django-jazzy-tabler — screenshot matrix</h1>
-<p>Run: <strong>{html.escape(run)}</strong> · modes: {modes} · {len(manifest)} captures.
-Open the <code>png</code> links relative to this file.</p>
-<table>
-<tr><th>slug</th><th>page</th><th>url</th><th>mode</th><th>status</th><th>bytes</th><th>shot</th><th>console</th></tr>
-{''.join(rows)}
-</table>
+<h1>django-jazzy-tabler — admin screenshot matrix</h1>
+<p class="meta">Run: <strong>{html.escape(run)}</strong> · {len(manifest)} captures ·
+desktop 1440×900 · generated by <code>tests/test_screenshots.py</code>
+(<code>JAZZY_SCREENSHOTS=1 uv run pytest tests/test_screenshots.py</code>)</p>
+{''.join(sections)}
 </body></html>"""
     (run_dir / "index.html").write_text(page)
 
 
-def test_screenshot_matrix(demo_server, browser):
+def test_screenshot_matrix(demo_server, stacked_server, browser):
     run_dir = PROOFS_ROOT / RUN
     manifest: list[dict] = []
-    inventory = demo_server.inventory
+    inventory = [p for p in demo_server.inventory if p.get("screenshot", True)]
 
-    for mode in THEME_MODES:
-        out_dir = run_dir / mode
-        out_dir.mkdir(parents=True, exist_ok=True)
+    # ---- light: full matrix -------------------------------------------------
+    out_dir = run_dir / "light"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    context = fresh_context(browser, demo_server.base_url, "light")
+    page = context.new_page()
+    tap = ConsoleTap()
+    tap.attach(page)
 
-        context = fresh_context(browser, demo_server.base_url, mode)
-        page = context.new_page()
-        tap = ConsoleTap()
-        tap.attach(page)
+    anon = [p for p in inventory if p["anonymous"]]
+    auth = [p for p in inventory if not p["anonymous"]]
+    _capture_inventory(page, tap, demo_server.base_url, anon, out_dir, manifest, "light")
 
-        # anonymous pages first (a logged-in session redirects away from login)
-        anon = [p for p in inventory if p["anonymous"]]
-        auth = [p for p in inventory if not p["anonymous"]]
-        _capture_inventory(page, tap, demo_server.base_url, anon, out_dir, manifest, mode)
+    login(page, demo_server.base_url)
+    _capture_inventory(page, tap, demo_server.base_url, auth, out_dir, manifest, "light")
 
-        login(page, demo_server.base_url)
-        _capture_inventory(page, tap, demo_server.base_url, auth, out_dir, manifest, mode)
+    for shot in INTERACTION_SHOTS:
+        page.goto(f"{demo_server.base_url}{shot['url']}", wait_until="networkidle")
+        _run_action(page, shot["action"])
+        record = {"mode": "light", "slug": shot["slug"], "url": shot["url"], "name": shot["name"],
+                  "status": 200, "console_errors": []}
+        record.update(_shot(page, out_dir, shot["slug"]))
+        manifest.append(record)
 
-        for shot in INTERACTION_SHOTS:
-            record = {"mode": mode, **{k: shot[k] for k in ("slug", "url", "name")}, "console_errors": []}
-            page.goto(f"{demo_server.base_url}{shot['url']}", wait_until="networkidle")
-            _run_action(page, shot["action"])
-            record["status"] = 200
-            record.update(_shot(page, out_dir, shot["slug"]))
-            manifest.append(record)
+    _capture_logout(page, demo_server.base_url, out_dir, manifest, "light")
+    context.close()
 
-        _capture_logout(page, demo_server.base_url, out_dir, manifest, mode)
-        context.close()
+    # ---- light: stacked changeform variant ----------------------------------
+    context = fresh_context(browser, stacked_server.base_url, "light")
+    page = context.new_page()
+    tap = ConsoleTap()
+    tap.attach(page)
+    login(page, stacked_server.base_url)
+    change_url = next(p["url"] for p in stacked_server.inventory if p["slug"] == "blog-post-change")
+    for url, slug, name in STACKED_PAGES:
+        url = url or change_url
+        _capture(page, tap, stacked_server.base_url, slug, url, name, 200, out_dir, manifest, "light")
+    context.close()
+
+    # ---- dark: main pages only ----------------------------------------------
+    out_dir = run_dir / "dark"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    context = fresh_context(browser, demo_server.base_url, "dark")
+    page = context.new_page()
+    tap = ConsoleTap()
+    tap.attach(page)
+    login(page, demo_server.base_url)
+    dark_pages = [p for p in inventory if p["slug"] in DARK_SLUGS]
+    assert len(dark_pages) == len(DARK_SLUGS), f"missing dark pages: {DARK_SLUGS - {p['slug'] for p in dark_pages}}"
+    _capture_inventory(page, tap, demo_server.base_url, dark_pages, out_dir, manifest, "dark")
+    context.close()
 
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))

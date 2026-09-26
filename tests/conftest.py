@@ -22,15 +22,11 @@ def seeded(db):
     return seed()
 
 
-@pytest.fixture(scope="session")
-def demo_server(tmp_path_factory):
-    """The seeded demo project served by a real ``manage.py runserver`` subprocess.
+def _boot_server(tmp_path, name: str, extra_env: dict | None = None):
+    """Migrate + seed a throwaway DB and serve the demo via `manage.py runserver`.
 
     A real server (not the test client) so CSS/JS are served exactly as in the demo.
     """
-    if not SCREENSHOTS_ENABLED:
-        pytest.skip("browser pass is opt-in: set JAZZY_SCREENSHOTS=1")
-
     import json
     import socket
     import subprocess
@@ -40,9 +36,8 @@ def demo_server(tmp_path_factory):
     from pathlib import Path
 
     workdir = Path(__file__).resolve().parent.parent
-    tmp = tmp_path_factory.mktemp("jazzy-screenshots")
-    db_path = tmp / "demo.sqlite3"
-    log_path = tmp / "runserver.log"
+    db_path = tmp_path / f"{name}.sqlite3"
+    log_path = tmp_path / f"runserver-{name}.log"
 
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
@@ -53,6 +48,7 @@ def demo_server(tmp_path_factory):
         "DEMO_DATABASE": str(db_path),
         "DEMO_ADMIN_PASSWORD": ADMIN_PASSWORD,
         "PYTHONDONTWRITEBYTECODE": "1",
+        **(extra_env or {}),
     }
 
     def manage(*args: str) -> str:
@@ -70,7 +66,7 @@ def demo_server(tmp_path_factory):
     manage("seed_demo", "--with-superuser", "-v0")
     inventory = json.loads(manage("dump_admin_inventory"))
 
-    log = open(log_path, "w")  # noqa: SIM115 - closed in fixture teardown
+    log = open(log_path, "w")  # noqa: SIM115 - closed in stop()
     proc = subprocess.Popen(
         [sys.executable, "manage.py", "runserver", f"127.0.0.1:{port}", "--noreload"],
         cwd=workdir,
@@ -91,14 +87,39 @@ def demo_server(tmp_path_factory):
                 raise RuntimeError(f"demo server did not start; see {log_path}")
             time.sleep(0.25)
 
-    yield SimpleNamespace(base_url=base_url, inventory=inventory, log_path=log_path)
+    def stop():
+        proc.terminate()
+        try:
+            proc.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+        log.close()
 
-    proc.terminate()
-    try:
-        proc.wait(timeout=10)
-    except subprocess.TimeoutExpired:
-        proc.kill()
-    log.close()
+    return SimpleNamespace(base_url=base_url, inventory=inventory, log_path=log_path, stop=stop)
+
+
+@pytest.fixture(scope="session")
+def demo_server(tmp_path_factory):
+    """The seeded demo project on a real dev server (default settings)."""
+    if not SCREENSHOTS_ENABLED:
+        pytest.skip("browser pass is opt-in: set JAZZY_SCREENSHOTS=1")
+    server = _boot_server(tmp_path_factory.mktemp("jazzy-screenshots"), "demo")
+    yield server
+    server.stop()
+
+
+@pytest.fixture(scope="session")
+def stacked_server(tmp_path_factory):
+    """Same demo server but with changeform_format=single (stacked layout)."""
+    if not SCREENSHOTS_ENABLED:
+        pytest.skip("browser pass is opt-in: set JAZZY_SCREENSHOTS=1")
+    server = _boot_server(
+        tmp_path_factory.mktemp("jazzy-screenshots-stacked"),
+        "stacked",
+        extra_env={"DEMO_CHANGEFORM_FORMAT": "single"},
+    )
+    yield server
+    server.stop()
 
 
 @pytest.fixture(scope="session")
