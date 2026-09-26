@@ -5,7 +5,8 @@
 {% get_jazzy_ui_tweaks as jazzy_ui %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+      data-bs-navbar-position="vertical">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -187,6 +188,10 @@
             {% endif %}
         {% endblock sidebar %}
 
+    {% endif %}{# not is_popup #}
+
+    <div class="page-wrapper" {% if is_popup %}style="margin-left:0;"{% endif %}>
+        {% if not is_popup %}
         <!-- Header (top navbar) -->
         <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none"
                 {% if jazzy_ui.navbar_data_theme %}data-bs-theme="dark"{% endif %}>
@@ -350,7 +355,6 @@
 
     {% endif %}{# not is_popup #}
 
-    <div class="page-wrapper" {% if is_popup %}style="margin-left:0;"{% endif %}>
         {% block page_content %}
             {% if not is_popup %}
                 <div class="page-header d-print-none">
