@@ -125,3 +125,45 @@ def test_submit_buttons_match_theme_button_family(page, demo_server):
 
     assert abs(save_h - add_h) < 2, f"save {save_h}px vs add {add_h}px"
     assert save_fs == add_fs, f"save font {save_fs} vs add font {add_fs}"
+
+
+def test_changelist_search_row_items_aligned(page, demo_server):
+    """Filter select2s, search input and Search button share one vertical center line."""
+    page.goto(f"{demo_server.base_url}/admin/blog/post/", wait_until="networkidle")
+
+    items = {
+        "filter": page.locator("#changelist-search .form-group .select2-container").first,
+        "input": page.locator("#changelist-search #searchbar"),
+        "button": page.locator("#changelist-search button[type=submit]"),
+    }
+    centers = {}
+    for name, locator in items.items():
+        box = locator.bounding_box()
+        assert box, f"{name} missing from search row"
+        centers[name] = box["y"] + box["height"] / 2
+
+    spread = max(centers.values()) - min(centers.values())
+    assert spread <= 2, f"search row items off-center: {centers}"
+
+
+def test_date_hierarchy_is_a_segmented_control(page, demo_server):
+    page.goto(f"{demo_server.base_url}/admin/blog/post/", wait_until="networkidle")
+    group = page.locator("#change-list-date-hierarchy .btn-group")
+    assert group.is_visible()
+    buttons = page.locator("#change-list-date-hierarchy .btn-group .btn")
+    assert buttons.count() >= 2, "expected year choices"
+    h = buttons.first.bounding_box()["height"]
+    assert h < 36, f"date hierarchy buttons should be small, got {h}px"
+
+    # drill to day level: the current choice is filled with the primary color
+    page.goto(
+        f"{demo_server.base_url}/admin/blog/post/?published_at__year=2024&published_at__month=1&published_at__day=15",
+        wait_until="networkidle",
+    )
+    active = page.locator("#change-list-date-hierarchy .btn.active")
+    assert active.count() == 1
+    back = page.locator("#change-list-date-hierarchy .btn-outline-secondary")
+    assert back.count() == 1, "expected a back link when drilled in"
+    bg = active.first.evaluate("el => getComputedStyle(el).backgroundColor")
+    channels = [round(float(c)) for c in bg[bg.index("(") + 1 : bg.rindex(")")].split(",")[:3]]
+    assert not all(c > 200 for c in channels), f"active date choice not filled: {bg}"

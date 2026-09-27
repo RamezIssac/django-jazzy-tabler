@@ -253,3 +253,19 @@ def test_selector_chooser_buttons(page, demo_server):
     assert chooseall.is_visible()
     ca_h = chooseall.bounding_box()["height"]
     assert ca_h < 28, f"choose-all should be a small action, got {ca_h}px tall"
+
+
+def test_password_readonly_field_is_styled(page, demo_server):
+    """User change form: the Reset password action looks like a button and the
+    hash summary cannot overflow its column (Django's widgets.css is not loaded)."""
+    page.goto(f"{demo_server.base_url}/admin/auth/user/1/change/", wait_until="networkidle")
+
+    reset = page.locator(".field-password a.button")
+    assert reset.count() == 1
+    radius = reset.evaluate("el => getComputedStyle(el).borderTopLeftRadius")
+    assert float(radius.replace("px", "")) > 0, "reset link not button-styled"
+    display = reset.evaluate("el => getComputedStyle(el).display")
+    assert "inline" in display, display
+
+    summary = page.locator(".field-password div[disabled] p").first
+    assert summary.evaluate("el => el.scrollWidth <= el.clientWidth + 1"), "hash summary overflows"

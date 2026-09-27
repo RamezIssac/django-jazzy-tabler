@@ -28,6 +28,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Login form was missing the hidden `next` field — logging in from
   `/admin/login/` landed on `/accounts/profile/` (404) instead of the
   dashboard.
+- 404/500 templates rendered with the full admin chrome (sidebar/navbar) and
+  a non-vendored icon class; they are now standalone pages with only
+  “Go back” and “Main page” actions (and must stay dependency-light).
+- `filter_horizontal`/`filter_vertical` chooser buttons rendered as raw text
+  buttons: Django ≥ 5 builds the widget in JS with `<button>` elements and
+  `div` title bars, and Django's `widgets.css` is not loaded by the themed
+  change form. The selector CSS now covers both markups (icon-box buttons,
+  themed title bars, quiet choose-all/clear-all actions).
+- Changelist filter row: `.form-group` bottom margins pushed the select2
+  filters off the shared center line of the search input/button.
+- Date hierarchy restyled as a compact segmented control (outline buttons,
+  filled active choice, back/forward links).
+- User password field: the “Reset password” action is button-styled
+  (`a.button` from Django's unloaded widgets.css), the hash summary is muted
+  and wraps instead of overflowing, and Django ≥ 5 `.form-hint` help text is
+  styled like the old `.helptext`.
 
 ### Added
 
