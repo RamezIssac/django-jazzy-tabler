@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  test:
+    name: pytest (py${{ matrix.python }}, django ${{ matrix.django }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12", "3.13"]
+        django: ["latest", "4.2"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install Python ${{ matrix.python }}
+        run: uv python install ${{ matrix.python }}
+      - run: uv sync --python ${{ matrix.python }}
+      - name: Pin Django floor
+        if: matrix.django == '4.2'
+        run: uv pip install 'django==4.2.*'
+      - run: uv run --no-sync pytest -q
+
+  matrix-site:
+    name: publish screenshot matrix (gh-pages)
+    # keep the public matrix in sync with develop
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # push the gh-pages branch
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the publish script needs origin/gh-pages
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.13
+      - run: uv sync --group screenshots --python 3.13
+      - run: uv run playwright install --with-deps chromium
+      - name: Capture and publish the matrix
+        run: JAZZY_PROOFS_RUN=develop scripts/publish-matrix-site.sh --push
