@@ -1,0 +1,75 @@
+name: release
+
+# Release flow: a push to main IS a release. The version comes from
+# pyproject.toml; if its tag already exists this workflow is a no-op
+# (idempotent for non-release pushes to main).
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: release gate — pytest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.13
+      - run: uv sync --python 3.13
+      - run: uv run pytest -q
+
+  publish:
+    name: tag + PyPI + GitHub release
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # tag + GitHub release
+      id-token: write # PyPI trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version from pyproject.toml
+        id: v
+        run: |
+          version="$(python3 -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Tag v${{ steps.v.outputs.version }} if new
+        id: tag
+        run: |
+          git fetch --tags --force
+          if git rev-parse -q --verify "refs/tags/v${{ steps.v.outputs.version }}" >/dev/null; then
+            echo "tag v${{ steps.v.outputs.version }} already exists — nothing to release"
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "v${{ steps.v.outputs.version }}" -m "v${{ steps.v.outputs.version }}"
+            git push origin "v${{ steps.v.outputs.version }}"
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build dist
+        if: steps.tag.outputs.created == 'true'
+        run: uv build
+
+      - name: Publish to PyPI
+        if: steps.tag.outputs.created == 'true'
+        uses: pypa/gh-action-pypi-publish@release-v1
+        # Trusted publishing (OIDC) — one-time PyPI setup:
+        # PyPI project -> Publishing -> add publisher: owner RamezIssac,
+        # repo django-jazzy-tabler, workflow release.yml.
+        # Alternative: create a PYPI_API_TOKEN secret and set `password: ${{ secrets.PYPI_API_TOKEN }}`.
+
+      - name: GitHub release
+        if: steps.tag.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NOTES="$(awk '/^## \[${{ steps.v.outputs.version }}\]/{f=1; next} /^## \[/{f=0} f' CHANGELOG.md)"
+          gh release create "v${{ steps.v.outputs.version }}" \
+            --title "v${{ steps.v.outputs.version }}" \
+            --notes "${NOTES:-Release v${{ steps.v.outputs.version }}}" \
+            dist/*

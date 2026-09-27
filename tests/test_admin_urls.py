@@ -1,0 +1,79 @@
+"""Coverage matrix, layer 1: every inventoried admin URL renders.
+
+The inventory is derived from the registered admin site (see
+``demo/admin_inventory.py``), so any admin page the theme can render is
+asserted here. This is the durable "all admin URLs are covered" suite.
+"""
+
+import pytest
+from django.test import Client
+
+from demo.admin_inventory import build_inventory
+
+MIN_INVENTORY_PAGES = 45  # sanity guard: the inventory must actually cover the site
+
+
+@pytest.mark.django_db
+def test_all_admin_urls_render(seeded, admin_client):
+    anonymous_client = Client()
+    pages = build_inventory()
+    assert len(pages) >= MIN_INVENTORY_PAGES, f"inventory shrank unexpectedly: {len(pages)} pages"
+
+    failures = []
+    for page in pages:
+        client = anonymous_client if page.anonymous else admin_client
+        response = client.get(page.url)
+        if response.status_code != page.expected_status:
+            failures.append(
+                f"{page.slug}: GET {page.url} -> {response.status_code} (expected {page.expected_status})"
+            )
+    assert not failures, "Broken admin pages:\n" + "\n".join(failures)
+
+
+@pytest.mark.django_db
+def test_history_pages_have_entries(seeded, admin_client):
+    """The screenshot matrix reviews history pages — they must never be empty."""
+    history_pages = [p for p in build_inventory() if p.slug.endswith("-history")]
+    assert history_pages
+    for page in history_pages:
+        content = admin_client.get(page.url).content.decode()
+        assert "list-group-item" in content, f"history page has no entries: {page.slug}"
+
+
+@pytest.mark.django_db
+def test_error_pages_have_no_admin_chrome(seeded, admin_client):
+    """404/500 are standalone pages: no sidebar/navbar, only go-back + main page."""
+    for url, status in (("/preview/404/", 404), ("/preview/500/", 500)):
+        response = admin_client.get(url)
+        assert response.status_code == status
+        content = response.content.decode()
+        assert "navbar-vertical" not in content, url
+        assert "jazzy-sidebar" not in content, url
+        assert "Go back" in content, url
+        assert "Main page" in content, url
+
+
+@pytest.mark.django_db
+def test_admin_logout_via_post(seeded, admin_client):
+    """Logout is POST-only in modern Django; the logged-out screen must render."""
+    response = admin_client.post("/admin/logout/")
+    assert response.status_code == 200
+    assert "logged out" in response.content.decode().lower()
+
+
+@pytest.mark.django_db
+def test_admin_anonymous_redirects_to_login(client, seeded):
+    response = client.get("/admin/")
+    assert response.status_code == 302
+    assert response["Location"].startswith("/admin/login/")
+
+
+@pytest.mark.django_db
+def test_login_redirects_to_admin_index(client, seeded, admin_user):
+    """Regression: the login form must carry the hidden ``next`` field,
+    otherwise Django falls back to LOGIN_REDIRECT_URL (/accounts/profile/ -> 404)."""
+    response = client.post(
+        "/admin/login/", {"username": admin_user.username, "password": "password", "next": "/admin/"}
+    )
+    assert response.status_code == 302
+    assert response["Location"] == "/admin/"
