@@ -92,6 +92,12 @@ uv sync --group screenshots
 uv run playwright install chromium                   # once
 JAZZY_SCREENSHOTS=1 uv run pytest tests/test_screenshots.py
 # -> proofs/<run>/index.html — grouped 4-column grid with a lightbox gallery
+
+# publish the matrix as a GitHub Pages site (no CI needed)
+scripts/publish-matrix-site.sh                       # local preview at proofs/site-preview/
+scripts/publish-matrix-site.sh --push                # push the gh-pages branch
+# then enable Pages once: repo Settings -> Pages -> Source: gh-pages, / root
+# -> https://<owner>.github.io/django-jazzy-tabler/
 ```
 
 ## Credits
