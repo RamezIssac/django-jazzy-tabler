@@ -76,7 +76,7 @@ Default `icons`:
 `topmenu_links`, `usermenu_links` and `custom_links` entries are dicts with **one of** `url` / `model` / `app`:
 
 ```python
-{"name": "Acme site", "url": "https://acme.example", "icon": "fas fa-globe", "new_window": True}
+{"name": "View site", "url": "/", "icon": "fas fa-globe", "new_window": True}
 {"name": "Posts", "model": "blog.Post"}                                  # links to the changelist
 {"name": "Blog", "app": "blog"}                                          # dropdown of the app's models (top menu only)
 {"name": "Staff only", "url": "admin:index", "permissions": ["auth.add_user"]}
@@ -136,15 +136,15 @@ Default `button_classes`:
 
 ```python
 JAZZY_SETTINGS = {
-    "site_title": "Acme Admin",
-    "site_header": "Acme",
-    "site_brand": "Acme",
-    "site_logo": "acme/img/logo.svg",
-    "login_logo": "acme/img/login-logo.svg",
-    "login_logo_dark": "acme/img/login-logo-dark.svg",
-    "site_icon": "acme/img/favicon-32.png",
+    "site_title": "Jazzy dashboard",
+    "site_header": "Jazzy dashboard",
+    "site_brand": "Jazzy dashboard",
+    "site_logo": "dashboard/img/logo.svg",
+    "login_logo": "dashboard/img/login-logo.svg",
+    "login_logo_dark": "dashboard/img/login-logo-dark.svg",
+    "site_icon": "dashboard/img/favicon-32.png",
     "welcome_sign": "Welcome back",
-    "copyright": "Acme Inc",
+    "copyright": "Acme Corp",
     "search_model": ["blog.Post", "auth.User"],
     "user_avatar": "avatar",
     "topmenu_links": [
@@ -152,7 +152,7 @@ JAZZY_SETTINGS = {
         {"app": "blog"},
     ],
     "usermenu_links": [
-        {"name": "Status page", "url": "https://status.acme.example", "new_window": True},
+        {"name": "Status page", "url": "https://status.example.com", "new_window": True},
     ],
     "hide_apps": [],
     "hide_models": ["auth.Group"],
@@ -169,8 +169,8 @@ JAZZY_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     "changeform_format_overrides": {"auth.user": "collapsible"},
     "changeform_show_buttons_below": True,
-    "custom_css": "acme/css/admin-extra.css",
-    "custom_js": "acme/js/admin-extra.js",
+    "custom_css": "dashboard/css/admin-extra.css",
+    "custom_js": "dashboard/js/admin-extra.js",
 }
 
 JAZZY_UI_TWEAKS = {
