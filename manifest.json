@@ -1,0 +1,326 @@
+[
+  {
+    "mode": "light",
+    "slug": "login",
+    "url": "/admin/login/",
+    "name": "Login",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/login.png",
+    "bytes": 20268
+  },
+  {
+    "mode": "light",
+    "slug": "index",
+    "url": "/admin/",
+    "name": "Dashboard",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/index.png",
+    "bytes": 56078
+  },
+  {
+    "mode": "light",
+    "slug": "password-change",
+    "url": "/admin/password_change/",
+    "name": "Password change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/password-change.png",
+    "bytes": 61825
+  },
+  {
+    "mode": "light",
+    "slug": "password-change-done",
+    "url": "/admin/password_change/done/",
+    "name": "Password change done",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/password-change-done.png",
+    "bytes": 40167
+  },
+  {
+    "mode": "light",
+    "slug": "preview-404",
+    "url": "/preview/404/",
+    "name": "404 template",
+    "console_errors": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "status": 404,
+    "file": "proofs/develop/light/preview-404.png",
+    "bytes": 21258
+  },
+  {
+    "mode": "light",
+    "slug": "preview-500",
+    "url": "/preview/500/",
+    "name": "500 template",
+    "console_errors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "status": 500,
+    "file": "proofs/develop/light/preview-500.png",
+    "bytes": 36192
+  },
+  {
+    "mode": "light",
+    "slug": "app-auth",
+    "url": "/admin/auth/",
+    "name": "App index: auth",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/app-auth.png",
+    "bytes": 46189
+  },
+  {
+    "mode": "light",
+    "slug": "auth-group-add",
+    "url": "/admin/auth/group/add/",
+    "name": "auth.group add",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/auth-group-add.png",
+    "bytes": 118694
+  },
+  {
+    "mode": "light",
+    "slug": "auth-group-change",
+    "url": "/admin/auth/group/1/change/",
+    "name": "auth.group change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/auth-group-change.png",
+    "bytes": 147559
+  },
+  {
+    "mode": "light",
+    "slug": "auth-user-changelist",
+    "url": "/admin/auth/user/",
+    "name": "auth.user changelist",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/auth-user-changelist.png",
+    "bytes": 62501
+  },
+  {
+    "mode": "light",
+    "slug": "auth-user-add",
+    "url": "/admin/auth/user/add/",
+    "name": "auth.user add",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/auth-user-add.png",
+    "bytes": 80293
+  },
+  {
+    "mode": "light",
+    "slug": "auth-user-change",
+    "url": "/admin/auth/user/1/change/",
+    "name": "auth.user change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/auth-user-change.png",
+    "bytes": 73235
+  },
+  {
+    "mode": "light",
+    "slug": "app-blog",
+    "url": "/admin/blog/",
+    "name": "App index: blog",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/app-blog.png",
+    "bytes": 47780
+  },
+  {
+    "mode": "light",
+    "slug": "blog-category-changelist",
+    "url": "/admin/blog/category/",
+    "name": "blog.category changelist",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-category-changelist.png",
+    "bytes": 62656
+  },
+  {
+    "mode": "light",
+    "slug": "blog-category-add",
+    "url": "/admin/blog/category/add/",
+    "name": "blog.category add",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-category-add.png",
+    "bytes": 50327
+  },
+  {
+    "mode": "light",
+    "slug": "blog-category-change",
+    "url": "/admin/blog/category/1/change/",
+    "name": "blog.category change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-category-change.png",
+    "bytes": 51651
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-changelist",
+    "url": "/admin/blog/post/",
+    "name": "blog.post changelist",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-changelist.png",
+    "bytes": 148979
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-changelist-search",
+    "url": "/admin/blog/post/?q=seed",
+    "name": "blog-post changelist (search)",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-changelist-search.png",
+    "bytes": 149394
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-changelist-page2",
+    "url": "/admin/blog/post/?p=2",
+    "name": "blog-post changelist (page 2)",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-changelist-page2.png",
+    "bytes": 148159
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-changelist-date-hierarchy",
+    "url": "/admin/blog/post/?published_at__year=2024",
+    "name": "blog-post changelist (date hierarchy 2024)",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-changelist-date-hierarchy.png",
+    "bytes": 161538
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-add",
+    "url": "/admin/blog/post/add/",
+    "name": "blog.post add",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-add.png",
+    "bytes": 67493
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-change",
+    "url": "/admin/blog/post/1/change/",
+    "name": "blog.post change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-change.png",
+    "bytes": 86141
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-delete",
+    "url": "/admin/blog/post/1/delete/",
+    "name": "blog.post delete",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-delete.png",
+    "bytes": 79009
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-history",
+    "url": "/admin/blog/post/1/history/",
+    "name": "blog.post history",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-history.png",
+    "bytes": 59159
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-add-select2-category-open",
+    "url": "/admin/blog/post/add/",
+    "name": "Post add \u2014 autocomplete select2 dropdown open",
+    "status": 200,
+    "console_errors": [],
+    "file": "proofs/develop/light/blog-post-add-select2-category-open.png",
+    "bytes": 57554
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-add-select2-author-open",
+    "url": "/admin/blog/post/add/",
+    "name": "Post add \u2014 plain select2 dropdown open",
+    "status": 200,
+    "console_errors": [],
+    "file": "proofs/develop/light/blog-post-add-select2-author-open.png",
+    "bytes": 62084
+  },
+  {
+    "mode": "light",
+    "slug": "logout",
+    "url": "/admin/logout/",
+    "name": "Logged out",
+    "status": 200,
+    "console_errors": [],
+    "file": "proofs/develop/light/logout.png",
+    "bytes": 19718
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-add-stacked",
+    "url": "/admin/blog/post/add/",
+    "name": "Post add \u2014 stacked layout",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-add-stacked.png",
+    "bytes": 116320
+  },
+  {
+    "mode": "light",
+    "slug": "blog-post-change-stacked",
+    "url": "/admin/blog/post/1/change/",
+    "name": "Post change \u2014 stacked layout",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/light/blog-post-change-stacked.png",
+    "bytes": 171971
+  },
+  {
+    "mode": "dark",
+    "slug": "index",
+    "url": "/admin/",
+    "name": "Dashboard",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/dark/index.png",
+    "bytes": 56963
+  },
+  {
+    "mode": "dark",
+    "slug": "blog-post-changelist",
+    "url": "/admin/blog/post/",
+    "name": "blog.post changelist",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/dark/blog-post-changelist.png",
+    "bytes": 150341
+  },
+  {
+    "mode": "dark",
+    "slug": "blog-post-change",
+    "url": "/admin/blog/post/1/change/",
+    "name": "blog.post change",
+    "console_errors": [],
+    "status": 200,
+    "file": "proofs/develop/dark/blog-post-change.png",
+    "bytes": 87874
+  }
+]
