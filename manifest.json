@@ -81,7 +81,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-group-add.png",
-    "bytes": 123645
+    "bytes": 123533
   },
   {
     "mode": "light",
@@ -121,7 +121,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-user-change.png",
-    "bytes": 74436
+    "bytes": 74306
   },
   {
     "mode": "light",
@@ -221,7 +221,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-change.png",
-    "bytes": 89775
+    "bytes": 89778
   },
   {
     "mode": "light",
@@ -241,7 +241,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-history.png",
-    "bytes": 59847
+    "bytes": 60326
   },
   {
     "mode": "light",
@@ -251,7 +251,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-category-open.png",
-    "bytes": 58453
+    "bytes": 58457
   },
   {
     "mode": "light",
@@ -261,7 +261,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-author-open.png",
-    "bytes": 63646
+    "bytes": 63647
   },
   {
     "mode": "light",
