@@ -194,21 +194,49 @@ select:not(.form-select):not([multiple]):focus {
 }
 
 /* ============================================================================
-   DJANGO RELATED WIDGET
+   DJANGO RELATED WIDGET (FK add/change/view/delete links)
+   Icons are font glyphs (currentColor): theme-correct in light AND dark,
+   sized in proportion to the 38px inputs, vertically centred.
    ========================================================================== */
 .related-widget-wrapper {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    align-items: stretch;
+    gap: 0.375rem;
+    flex-wrap: nowrap;
 }
 
-.related-widget-wrapper .select2-container {
-    flex: 1;
+.related-widget-wrapper > select,
+.related-widget-wrapper > input,
+.related-widget-wrapper > .select2-container,
+.related-widget-wrapper > .selector {
+    flex: 1 1 auto;
     min-width: 0;
 }
 
-.related-widget-wrapper-link {
-    flex-shrink: 0;
+.related-widget-wrapper-link,
+.related-widget-wrapper > .related-lookup {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    color: var(--tblr-secondary-color);
+    border-radius: var(--tblr-border-radius);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+.related-widget-wrapper-link:hover,
+.related-widget-wrapper-link:focus,
+.related-widget-wrapper > .related-lookup:hover,
+.related-widget-wrapper > .related-lookup:focus {
+    color: var(--tblr-primary);
+    background-color: var(--tblr-bg-surface-secondary);
+}
+
+.related-widget-wrapper-link > i,
+.related-widget-wrapper > .related-lookup > i {
+    font-size: 0.8125rem;
+    line-height: 1;
 }
 
 /* ============================================================================
@@ -229,52 +257,143 @@ select:not(.form-select):not([multiple]):focus {
 }
 
 /* ============================================================================
-   SELECT2 - Theme support
+   SELECT2 - one layer covering both themes in use:
+   "default" (JazzySelect + change_form.js/change_list.js) and
+   "admin-autocomplete" (Django autocomplete_fields).
+   Double-class selectors win over select2.min.css / Django's autocomplete.css
+   without a single !important. Colors come from Tabler variables, so light
+   and dark mode both work from the same rules.
    ========================================================================== */
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--single,
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple {
-    background-color: var(--tblr-body-bg);
-    border-color: var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--single .select2-selection__rendered,
-html[data-bs-theme="dark"] .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-dropdown {
-    background-color: var(--tblr-body-bg);
-    border-color: var(--tblr-border-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-results__option {
-    background-color: var(--tblr-body-bg);
-    color: var(--tblr-body-color);
-}
-
-html[data-bs-theme="dark"] .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: var(--tblr-primary);
-    color: var(--tblr-white);
-}
-
 .select2-container {
     min-width: 8rem;
 }
 
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-selection--multiple {
+.select2-container--default.select2-container .select2-selection--single,
+.select2-container--default.select2-container .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple {
+    background-color: var(--tblr-bg-forms, var(--tblr-body-bg));
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
     min-height: calc(2.25rem + 2px);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
+.select2-container--default.select2-container .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single {
     height: calc(2.25rem + 2px);
+    display: flex;
+    align-items: center;
 }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: calc(2.25rem + 2px);
+.select2-container--default.select2-container .select2-selection--single .select2-selection__rendered,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__rendered {
+    color: var(--tblr-body-color);
+    line-height: 1.5;
+    padding: 0 2rem 0 .75rem;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__placeholder,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__placeholder {
+    color: var(--tblr-secondary-color);
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__arrow,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 100%;
+    top: 0;
+    right: .5rem;
+    width: 1.25rem;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__arrow b,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--tblr-secondary-color) transparent transparent transparent;
+}
+
+.select2-container--default.select2-container .select2-selection--single .select2-selection__clear,
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__clear {
+    color: var(--tblr-secondary-color);
+    font-size: 1rem;
+    line-height: 1;
+    margin-right: .375rem;
+}
+
+.select2-container--default.select2-container.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container.select2-container--open .select2-selection--single,
+.select2-container--default.select2-container.select2-container--focus .select2-selection--multiple,
+.select2-container--default.select2-container.select2-container--open .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container.select2-container--focus .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container.select2-container--open .select2-selection--single,
+.select2-container--admin-autocomplete.select2-container.select2-container--focus .select2-selection--multiple,
+.select2-container--admin-autocomplete.select2-container.select2-container--open .select2-selection--multiple {
+    border-color: var(--tblr-primary);
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(var(--tblr-primary-rgb), .25);
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__rendered,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__rendered {
+    padding: 0 .375rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__choice,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__choice {
+    background-color: var(--tblr-bg-surface-secondary);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
+    padding: .125rem .5rem;
+    margin-top: .25rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-selection__choice__remove,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-selection__choice__remove {
+    color: var(--tblr-secondary-color);
+    margin-right: .375rem;
+}
+
+.select2-container--default.select2-container .select2-selection--multiple .select2-search__field,
+.select2-container--admin-autocomplete.select2-container .select2-selection--multiple .select2-search__field {
+    background-color: transparent;
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default .select2-dropdown,
+.select2-container--admin-autocomplete .select2-dropdown,
+.select2-dropdown {
+    background-color: var(--tblr-bg-surface);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    box-shadow: var(--tblr-shadow-sm);
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default.select2-container .select2-search--dropdown .select2-search__field,
+.select2-container--admin-autocomplete.select2-container .select2-search--dropdown .select2-search__field {
+    background-color: var(--tblr-bg-forms, var(--tblr-body-bg));
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    color: var(--tblr-body-color);
+    padding: .375rem .75rem;
+}
+
+.select2-container--default.select2-container .select2-results__option,
+.select2-container--admin-autocomplete.select2-container .select2-results__option {
+    color: var(--tblr-body-color);
+}
+
+.select2-container--default.select2-container .select2-results__option--highlighted.select2-results__option--selectable,
+.select2-container--admin-autocomplete.select2-container .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: var(--tblr-primary);
+    color: #fff;
+}
+
+.select2-container--default.select2-container .select2-results__option--selected,
+.select2-container--admin-autocomplete.select2-container .select2-results__option--selected {
+    background-color: var(--tblr-bg-surface-secondary);
+    color: var(--tblr-body-color);
 }
 
 /* ============================================================================
@@ -286,6 +405,12 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 
 .form-group {
     margin-bottom: 1rem;
+}
+
+/* Changelist filter row: form-groups live inside a centered flex row —
+   the bottom margin would push them off-center. */
+#change-list-filters .form-group {
+    margin-bottom: 0;
 }
 
 .inline-related .form-row,
@@ -300,11 +425,16 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 
 /* ============================================================================
    HORIZONTAL SELECTORS - filter_horizontal / filter_vertical
+   Django >= 5 builds this widget in JS (SelectFilter2) with <button>
+   choosers and div title bars; Django 4.2 renders <a>/<h2> server-side.
+   Both are covered. Django's own widgets.css is NOT loaded here, so this
+   section is the only styling — keep it complete.
    ========================================================================== */
 .selector {
     display: flex;
     align-items: stretch;
     width: 100%;
+    gap: 0.5rem;
 }
 
 .selector-available,
@@ -313,49 +443,122 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     min-width: 0;
 }
 
+/* Title bars (divs on Django >= 5, h2 on 4.2) */
+.selector-available-title,
+.selector-chosen-title,
+.selector-available h2,
+.selector-chosen h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.375rem 0.75rem;
+    background-color: var(--tblr-bg-surface);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius) var(--tblr-border-radius) 0 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--tblr-body-color);
+}
+
+.selector-available-title label,
+.selector-chosen-title label {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    width: auto;
+}
+
+/* "Choose all" / "Clear all" — quiet small actions inside the title bars */
+.selector .selector-chooseall,
+.selector .selector-clearall {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: var(--tblr-secondary-color);
+    background: transparent;
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: var(--tblr-border-radius);
+    opacity: 1;
+    cursor: pointer;
+}
+
+.selector .selector-chooseall:hover,
+.selector .selector-clearall:hover {
+    color: var(--tblr-primary);
+    border-color: var(--tblr-primary);
+}
+
+/* Middle column: compact icon boxes for move add/remove */
 .selector ul.selector-chooser {
     flex: 0 0 auto;
+    align-self: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0.5rem;
+    gap: 0.375rem;
+    width: auto;
+    padding: 0;
     margin: 0;
     list-style: none;
-    gap: 0.25rem;
+    transform: none;
+    background: transparent;
 }
 
 .selector ul.selector-chooser li {
+    margin: 0;
+    padding: 0;
     list-style: none;
 }
 
-.selector ul.selector-chooser a {
-    display: block;
+.selector .selector-chooser button,
+.selector .selector-chooser a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 2rem;
     height: 2rem;
-    line-height: 2rem;
-    text-align: center;
+    padding: 0;
     background-color: var(--tblr-bg-surface);
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
-    color: var(--tblr-body-color);
-    font-size: 0;
+    color: var(--tblr-secondary-color);
+    font-size: 0;        /* hide the text label, keep it for screen readers */
+    text-indent: 0;
+    overflow: hidden;
+    opacity: 1;
+    cursor: pointer;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
 
-.selector ul.selector-chooser a::before {
+.selector .selector-chooser button::before,
+.selector .selector-chooser a::before {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     font-size: 0.75rem;
+    text-indent: 0;
 }
 
-.selector ul.selector-chooser a.selector-chooseall::before { content: "\f101"; }
-.selector ul.selector-chooser a.selector-add::before { content: "\f054"; }
-.selector ul.selector-chooser a.selector-remove::before { content: "\f053"; }
-.selector ul.selector-chooser a.selector-clearall::before { content: "\f100"; }
+.selector .selector-chooser .selector-add::before { content: "\f054"; }
+.selector .selector-chooser .selector-remove::before { content: "\f053"; }
+.selector .selector-chooser .selector-chooseall::before { content: "\f101"; }
+.selector .selector-chooser .selector-clearall::before { content: "\f100"; }
 
-.selector ul.selector-chooser a:hover {
+.selector .selector-chooser button:not(:disabled):hover,
+.selector .selector-chooser a:hover {
     background-color: var(--tblr-primary);
     border-color: var(--tblr-primary);
     color: #fff;
+}
+
+.selector .selector-chooser button:disabled {
+    opacity: 0.45;
+    cursor: default;
 }
 
 .selector select {
@@ -368,17 +571,6 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: 0 0 var(--tblr-border-radius) var(--tblr-border-radius);
     border-top: none;
-}
-
-.selector-available h2,
-.selector-chosen h2 {
-    margin: 0;
-    padding: 0.375rem 0.75rem;
-    background-color: var(--tblr-bg-surface);
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
-    border-radius: var(--tblr-border-radius) var(--tblr-border-radius) 0 0;
-    font-size: 0.8125rem;
-    font-weight: 600;
 }
 
 .selector .selector-filter {
@@ -404,6 +596,8 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 
 /* ============================================================================
    ACTIONS PANEL - Detail page sidebar
+   Buttons use plain Tabler .btn classes (same family as the rest of the UI);
+   this section only handles layout.
    ========================================================================== */
 #jazzy-actions {
     position: sticky;
@@ -417,27 +611,6 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 #jazzy-actions .d-flex .btn,
 #jazzy-actions .d-flex input[type="submit"] {
     width: 100%;
-}
-
-#jazzy-actions .object-tools {
-    list-style: none;
-    padding: 0;
-    margin: 1rem 0 0 0;
-}
-
-#jazzy-actions .object-tools li a {
-    display: block;
-    padding: .25rem .5rem;
-    font-size: var(--tblr-body-font-size, 0.875rem);
-    text-align: center;
-    border-radius: var(--tblr-border-radius);
-    background-color: var(--tblr-bg-surface);
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-#jazzy-actions .object-tools li a:hover {
-    background-color: var(--tblr-bg-surface-secondary);
 }
 
 .jazzy-actions-bottom {
@@ -457,31 +630,18 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     width: auto;
 }
 
-.jazzy-actions-bottom .object-tools {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
+/* ============================================================================
+   PAGE HEADER RHYTHM
+   The title belongs to its content: breathe away from the breadcrumbs and
+   sit tighter above the page body (Tabler's default 1.5rem top gap splits
+   the header from what it heads).
+   ========================================================================== */
+.page-header .breadcrumb {
+    margin-bottom: .375rem;
 }
 
-.jazzy-actions-bottom .object-tools li {
-    margin: 0;
-}
-
-.jazzy-actions-bottom .object-tools li a {
-    display: inline-block;
-    padding: .25rem .5rem;
-    font-size: var(--tblr-body-font-size, 0.875rem);
-    border-radius: var(--tblr-border-radius);
-    background-color: var(--tblr-bg-surface);
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
-    color: var(--tblr-body-color);
-}
-
-.jazzy-actions-bottom .object-tools li a:hover {
-    background-color: var(--tblr-bg-surface-secondary);
+.page-body {
+    margin-top: calc(var(--tblr-page-padding, 1.5rem) / 2);
 }
 
 /* ============================================================================
@@ -497,9 +657,11 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 
 /* ============================================================================
    HELP TEXT AND ERRORS
+   (.helptext is the pre-5.0 class, .form-hint is Django >= 5)
    ========================================================================== */
 .help-block,
-.helptext {
+.helptext,
+.form-hint {
     font-size: 0.8125rem;
     color: var(--tblr-secondary-color);
     margin-top: 0.25rem;
@@ -522,6 +684,48 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
     color: var(--tblr-secondary-color);
+}
+
+/* ============================================================================
+   READONLY PASSWORD HASH (user change form)
+   Django's widgets.css (not loaded here) styles class="button"; the hash
+   summary is long unbroken text that must not overflow its column.
+   ========================================================================== */
+a.button,
+a.button:visited {
+    display: inline-flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: var(--tblr-body-font-size, 0.875rem);
+    line-height: 1.5;
+    color: var(--tblr-primary);
+    background: transparent;
+    border: var(--tblr-border-width) solid var(--tblr-primary);
+    border-radius: var(--tblr-border-radius);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+a.button:hover {
+    color: #fff;
+    background: var(--tblr-primary);
+}
+
+.field-password div[disabled] p:first-child {
+    font-size: 0.8125rem;
+    color: var(--tblr-secondary-color);
+    margin-bottom: 0.5rem;
+    overflow-wrap: anywhere;
+}
+
+.field-password div[disabled] p:first-child strong {
+    font-weight: 600;
+}
+
+/* ============================================================================
+   DATE HIERARCHY (changelist drill-down)
+   ========================================================================== */
+.date-hierarchy {
+    font-size: 0.875rem;
 }
 
 /* ============================================================================
@@ -556,9 +760,5 @@ html[data-bs-theme="dark"] .select2-container--default .select2-results__option-
 .popup .page-wrapper {
     margin-left: 0;
     padding-top: 1rem;
-}
-
-.select2.select2-container {
-    border: var(--tblr-border-width) solid var(--tblr-border-color);
 }
 
