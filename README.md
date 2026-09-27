@@ -1,8 +1,18 @@
 # django-jazzy-tabler
 
-**A drop-in Django admin theme built on [Tabler](https://tabler.io) (Bootstrap 5) — with the settings you already know from [django-jazzmin](https://github.com/farridav/django-jazzmin).**
+A drop-in Django admin theme based on [Tabler](https://tabler.io) (Bootstrap 5), inspired by [django-jazzmin](https://github.com/farridav/django-jazzmin).
 
-No build step, no Node, no npm. One `pip install`, two lines in `settings.py`, and your admin gets a clean, modern skin with first-class **light and dark mode**.
+Two lines in your settings and the stock admin gets a clean, modern skin — with first-class **light and dark mode**:
+
+```python
+INSTALLED_APPS = [
+    "jazzy_tabler",
+    "django.contrib.admin",
+    # ...
+]
+```
+
+No build step, no Node, no npm — everything ships as static files inside the wheel.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/RamezIssac/django-jazzy-tabler/main/docs/screenshots/dashboard-dark.png">
@@ -11,13 +21,12 @@ No build step, no Node, no npm. One `pip install`, two lines in `settings.py`, a
 
 > **Status:** alpha. The configuration surface is stable enough to use; templates may still shift between minor versions.
 
-## Why jazzy-tabler?
+## Highlights
 
-- **Drop-in.** Templates resolve ahead of `django.contrib.admin` — keep your `ModelAdmin`s exactly as they are.
-- **Jazzmin-compatible settings.** A `JAZZY_SETTINGS` dict you may already have just works; `JAZZMIN_SETTINGS` is read as a fallback, so A/B testing the two themes is an `INSTALLED_APPS` toggle.
-- **Light + dark, done properly.** Every screen is themed through Tabler CSS variables — including select2 dropdowns, autocomplete fields and the little FK add/change/view/delete icons.
+- **Drop-in.** Templates resolve ahead of `django.contrib.admin` — your `ModelAdmin`s stay untouched.
+- **Light + dark, everywhere.** Every screen is themed through Tabler CSS variables — select2 dropdowns, autocomplete fields and the little FK add/change/view/delete icons included.
 - **Changeform layouts.** `single`, `horizontal_tabs`, `vertical_tabs`, `carousel`, `collapsible` — globally or per model.
-- **Honest vendor stack.** Tabler 1.5.1 and FontAwesome 6 ship as static files inside the wheel. The admin works fully offline/air-gapped.
+- **Familiar configuration.** One optional `JAZZY_SETTINGS` dict; if you're coming from jazzmin, your `JAZZMIN_SETTINGS` is read as a fallback.
 - **Tested against what you see.** The repo runs a URL-coverage suite (every admin page must render) plus an opt-in Playwright screenshot matrix over the whole admin, in both theme modes.
 
 | Changelist | Change form |
@@ -31,24 +40,14 @@ No build step, no Node, no npm. One `pip install`, two lines in `settings.py`, a
 pip install django-jazzy-tabler   # or: uv add django-jazzy-tabler
 ```
 
-Add `jazzy_tabler` to `INSTALLED_APPS` **before** `django.contrib.admin`:
-
-```python
-INSTALLED_APPS = [
-    "jazzy_tabler",
-    "django.contrib.admin",
-    # ...
-]
-```
-
-That's it — visit `/admin/`. Everything below is optional.
+then the `INSTALLED_APPS` snippet above — that's it, visit `/admin/`. Everything below is optional:
 
 ```python
 # settings.py — all keys optional, all with sane defaults
 JAZZY_SETTINGS = {
-    "site_title": "Acme Admin",
-    "site_header": "Acme",
-    "site_brand": "Acme",
+    "site_title": "Jazzy dashboard",
+    "site_header": "Jazzy dashboard",
+    "site_brand": "Jazzy dashboard",
     "welcome_sign": "Welcome back",
     "search_model": "blog.Post",
     "icons": {
@@ -88,20 +87,20 @@ uv run python manage.py migrate --run-syncdb
 uv run python manage.py seed_demo --with-superuser   # admin / admin (DEMO_ADMIN_PASSWORD to override)
 uv run python manage.py runserver                    # browse http://127.0.0.1:8000/admin/
 
-# opt-in browser pass: screenshot matrix over every admin page, light + dark
+# opt-in browser pass: screenshot matrix over the admin, light + dark
 uv sync --group screenshots
 uv run playwright install chromium                   # once
 JAZZY_SCREENSHOTS=1 uv run pytest tests/test_screenshots.py
-# -> proofs/latest/{light,dark}/*.png + manifest.json + index.html
+# -> proofs/<run>/index.html — grouped 4-column grid with a lightbox gallery
 ```
 
 ## Credits
 
-This theme is only possible because of [**Tabler**](https://tabler.io) — a beautiful, open-source dashboard UI kit. If you use and enjoy `django-jazzy-tabler`, please:
+- [**Tabler**](https://tabler.io) — the beautiful open-source dashboard UI kit this theme is built on. ⭐ [Star it](https://github.com/tabler/tabler), 💛 [sponsor it](https://github.com/sponsors/codecalm).
+- [django-jazzmin](https://github.com/farridav/django-jazzmin) — the inspiration for the configuration surface.
+- [AdminLTE](https://adminlte.io) — the dashboard kit behind jazzmin's look.
 
-- ⭐ Star this repo if it saved you time — it helps others find the theme
-- ⭐ Star the [Tabler repo](https://github.com/tabler/tabler)
-- 💛 [Sponsor Tabler](https://github.com/sponsors/codecalm) to keep the upstream UI kit alive
+And if jazzy-tabler saved you time: ⭐ star this repo — it helps others find the theme.
 
 ## License
 
