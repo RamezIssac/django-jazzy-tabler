@@ -14,7 +14,6 @@ Collapsible (accordion) change form layout
         <div id="collapse-{{ fieldset.name|unicode_slugify }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#changeform-accordion">
             <div class="accordion-body">
                 {% if fieldset.is_inline %}
-                    {{ fieldset.formset.management_form }}
                     {% include fieldset.opts.template with inline_admin_formset=fieldset %}
                 {% else %}
                     {% include "admin/includes/fieldset.html" with heading=None %}

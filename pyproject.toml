@@ -1,6 +1,6 @@
 [project]
 name = "django-jazzy-tabler"
-version = "0.1.1"
+version = "0.2.0"
 description = "Drop-in Django admin theme built on Tabler.io, inspired by django-jazzmin"
 readme = "README.md"
 license = "MIT"
@@ -45,10 +45,15 @@ packages = ["jazzy_tabler"]
 dev = [
     "pytest>=8",
     "pytest-django>=4.8",
-    "selenium>=4.43.0",
+]
+screenshots = [
+    "playwright>=1.40",
 ]
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "demo.settings"
 python_files = ["test_*.py"]
 pythonpath = ["."]
+markers = [
+    "screenshots: browser-based screenshot matrix and layout assertions (opt-in: JAZZY_SCREENSHOTS=1, needs the 'screenshots' dependency group)",
+]

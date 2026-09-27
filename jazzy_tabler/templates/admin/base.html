@@ -5,7 +5,8 @@
 {% get_jazzy_ui_tweaks as jazzy_ui %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+      data-bs-navbar-position="vertical">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,6 +36,13 @@
 
     <!-- Django-specific fixes -->
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+
+    {% if jazzy_ui.accent_color and jazzy_ui.accent_color != "primary" %}
+        <style>
+            #jazzy-sidebar .nav-link.active,
+            #jazzy-sidebar .dropdown-item.active { color: var(--tblr-{{ jazzy_ui.accent_color }}); }
+        </style>
+    {% endif %}
 
     {% if jazzy_settings.custom_css %}
         <link rel="stylesheet" href="{% static jazzy_settings.custom_css %}">
@@ -187,6 +195,10 @@
             {% endif %}
         {% endblock sidebar %}
 
+    {% endif %}{# not is_popup #}
+
+    <div class="page-wrapper" {% if is_popup %}style="margin-left:0;"{% endif %}>
+        {% if not is_popup %}
         <!-- Header (top navbar) -->
         <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none"
                 {% if jazzy_ui.navbar_data_theme %}data-bs-theme="dark"{% endif %}>
@@ -350,7 +362,6 @@
 
     {% endif %}{# not is_popup #}
 
-    <div class="page-wrapper" {% if is_popup %}style="margin-left:0;"{% endif %}>
         {% block page_content %}
             {% if not is_popup %}
                 <div class="page-header d-print-none">
