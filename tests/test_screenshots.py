@@ -113,9 +113,9 @@ class ConsoleTap:
             self.record["console_errors"].append(f"pageerror: {exc}")
 
 
-def _shot(page, out_dir: Path, slug: str) -> dict:
+def _shot(page, out_dir: Path, slug: str, full_page: bool = False) -> dict:
     path = out_dir / f"{slug}.png"
-    page.screenshot(path=str(path))
+    page.screenshot(path=str(path), full_page=full_page)
     return {"file": str(path), "bytes": path.stat().st_size}
 
 
@@ -130,7 +130,7 @@ def _run_action(page, action: str):
         raise ValueError(f"unknown action {action}")
 
 
-def _capture(page, tap, base_url, slug, url, name, expected_status, out_dir, manifest, mode):
+def _capture(page, tap, base_url, slug, url, name, expected_status, out_dir, manifest, mode, full_page=False):
     record = {"mode": mode, "slug": slug, "url": url, "name": name, "console_errors": []}
     tap.record = record
     response = page.goto(f"{base_url}{url}", wait_until="networkidle")
@@ -138,7 +138,7 @@ def _capture(page, tap, base_url, slug, url, name, expected_status, out_dir, man
     record["status"] = status
     assert status == expected_status, f"[{mode}] {slug}: {url} -> {status} (expected {expected_status})"
     assert page.evaluate("document.documentElement.getAttribute('data-bs-theme')") == mode
-    record.update(_shot(page, out_dir, slug))
+    record.update(_shot(page, out_dir, slug, full_page=full_page))
     assert record["bytes"] > 10_000, f"[{mode}] {slug}: suspiciously small screenshot"
     manifest.append(record)
     tap.record = None
@@ -350,7 +350,8 @@ def test_screenshot_matrix(demo_server, stacked_server, browser):
     change_url = next(p["url"] for p in stacked_server.inventory if p["slug"] == "blog-post-change")
     for url, slug, name in STACKED_PAGES:
         url = url or change_url
-        _capture(page, tap, stacked_server.base_url, slug, url, name, 200, out_dir, manifest, "light")
+        # full page: the point of the stacked variant is seeing fieldsets AND inlines
+        _capture(page, tap, stacked_server.base_url, slug, url, name, 200, out_dir, manifest, "light", full_page=True)
     context.close()
 
     # ---- dark: main pages only ----------------------------------------------

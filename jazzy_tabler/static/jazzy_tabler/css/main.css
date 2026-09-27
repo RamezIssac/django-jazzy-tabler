@@ -407,6 +407,12 @@ select:not(.form-select):not([multiple]):focus {
     margin-bottom: 1rem;
 }
 
+/* Changelist filter row: form-groups live inside a centered flex row —
+   the bottom margin would push them off-center. */
+#change-list-filters .form-group {
+    margin-bottom: 0;
+}
+
 .inline-related .form-row,
 .inline-related .form-group {
     padding: 0.5rem;
@@ -651,9 +657,11 @@ select:not(.form-select):not([multiple]):focus {
 
 /* ============================================================================
    HELP TEXT AND ERRORS
+   (.helptext is the pre-5.0 class, .form-hint is Django >= 5)
    ========================================================================== */
 .help-block,
-.helptext {
+.helptext,
+.form-hint {
     font-size: 0.8125rem;
     color: var(--tblr-secondary-color);
     margin-top: 0.25rem;
@@ -676,6 +684,48 @@ select:not(.form-select):not([multiple]):focus {
     border: var(--tblr-border-width) solid var(--tblr-border-color);
     border-radius: var(--tblr-border-radius);
     color: var(--tblr-secondary-color);
+}
+
+/* ============================================================================
+   READONLY PASSWORD HASH (user change form)
+   Django's widgets.css (not loaded here) styles class="button"; the hash
+   summary is long unbroken text that must not overflow its column.
+   ========================================================================== */
+a.button,
+a.button:visited {
+    display: inline-flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: var(--tblr-body-font-size, 0.875rem);
+    line-height: 1.5;
+    color: var(--tblr-primary);
+    background: transparent;
+    border: var(--tblr-border-width) solid var(--tblr-primary);
+    border-radius: var(--tblr-border-radius);
+    transition: color .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+a.button:hover {
+    color: #fff;
+    background: var(--tblr-primary);
+}
+
+.field-password div[disabled] p:first-child {
+    font-size: 0.8125rem;
+    color: var(--tblr-secondary-color);
+    margin-bottom: 0.5rem;
+    overflow-wrap: anywhere;
+}
+
+.field-password div[disabled] p:first-child strong {
+    font-weight: 600;
+}
+
+/* ============================================================================
+   DATE HIERARCHY (changelist drill-down)
+   ========================================================================== */
+.date-hierarchy {
+    font-size: 0.875rem;
 }
 
 /* ============================================================================
