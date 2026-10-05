@@ -29,6 +29,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: astral-sh/setup-uv@v5
 
       - name: Read version from pyproject.toml
         id: v
@@ -57,7 +58,7 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.tag.outputs.created == 'true'
-        uses: pypa/gh-action-pypi-publish@release-v1
+        uses: pypa/gh-action-pypi-publish@release/v1
         # Trusted publishing (OIDC) — one-time PyPI setup:
         # PyPI project -> Publishing -> add publisher: owner RamezIssac,
         # repo django-jazzy-tabler, workflow release.yml.
