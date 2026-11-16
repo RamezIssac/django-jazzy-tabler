@@ -37,7 +37,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/password-change-done.png",
-    "bytes": 41243
+    "bytes": 41242
   },
   {
     "mode": "light",
@@ -81,7 +81,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-group-add.png",
-    "bytes": 123645
+    "bytes": 123639
   },
   {
     "mode": "light",
@@ -121,7 +121,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-user-change.png",
-    "bytes": 74115
+    "bytes": 74453
   },
   {
     "mode": "light",
@@ -131,7 +131,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/app-blog.png",
-    "bytes": 48214
+    "bytes": 48213
   },
   {
     "mode": "light",
@@ -191,7 +191,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist-page2.png",
-    "bytes": 154962
+    "bytes": 154965
   },
   {
     "mode": "light",
@@ -221,7 +221,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-change.png",
-    "bytes": 89775
+    "bytes": 89779
   },
   {
     "mode": "light",
@@ -241,7 +241,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-history.png",
-    "bytes": 60055
+    "bytes": 59661
   },
   {
     "mode": "light",
@@ -251,7 +251,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-category-open.png",
-    "bytes": 58490
+    "bytes": 58402
   },
   {
     "mode": "light",
@@ -261,7 +261,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-author-open.png",
-    "bytes": 63655
+    "bytes": 63593
   },
   {
     "mode": "light",
