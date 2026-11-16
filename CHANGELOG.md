@@ -3,6 +3,16 @@
 All notable changes to django-jazzy-tabler are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- Top-navbar extension point: `{% block navbar_extra %}` in `admin/base.html`,
+  defaulting to an empty `jazzy_tabler/includes/navbar_extra.html` include.
+  Apps can inject extra navbar items (docs links, badges, ...) by overriding
+  the include (INSTALLED_APPS order) or extending the block — rendered in both
+  the desktop top navbar and the mobile `d-lg-none` navbar.
+
 ## [0.2.0] - 2026-09-27
 
 ### Changed
