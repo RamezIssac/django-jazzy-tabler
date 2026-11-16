@@ -40,6 +40,10 @@ The settings surface is intentionally [django-jazzmin](https://github.com/farrid
 | `search_model` | `None` | `"app.Model"` or a list of them. Renders a global search box in the navbar that submits to that model's changelist. Omit to hide the box. |
 | `topmenu_links` | `[]` | List of link dicts (see [Menu links](#menu-links)). Rendered in the top navbar; `app` entries become dropdowns. |
 
+Beyond settings, apps can add arbitrary items (docs links, badges, ...) to the
+top navbar via the `{% block navbar_extra %}` / `jazzy_tabler/includes/navbar_extra.html`
+extension point — see [Extending the top navbar](../README.md#extending-the-top-navbar).
+
 ### User menu (top right)
 
 | Key | Default | Notes |
