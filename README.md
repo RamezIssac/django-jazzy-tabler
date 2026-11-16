@@ -69,6 +69,23 @@ JAZZY_UI_TWEAKS = {
 📖 **Full settings reference — every honored key, the jazzmin fallback rules, menu/icon structures, changeform formats, copy-pasteable examples:**
 [docs/settings.md](https://github.com/RamezIssac/django-jazzy-tabler/blob/main/docs/settings.md)
 
+## Extending the top navbar
+
+Apps can inject extra items into the top navbar (documentation links, status
+badges, environment banners, ...) without copying `admin/base.html`:
+
+- **Override the include** — ship `jazzy_tabler/includes/navbar_extra.html` in
+  an app listed **before** `"jazzy_tabler"` in `INSTALLED_APPS`. The include is
+  empty by default and renders in both the desktop top navbar and the mobile
+  (`d-lg-none`) navbar.
+- **Or extend the block** — extend `admin/base.html` and override
+  `{% block navbar_extra %}` (keep `{% include "jazzy_tabler/includes/navbar_extra.html" %}`
+  inside it if the mobile navbar should keep rendering the include).
+
+Use Tabler navbar markup, e.g. `<div class="nav-item d-none d-md-flex me-3"><a class="btn btn-ghost-secondary" href="...">…</a></div>`;
+spacing utilities like `me-3` are RTL-safe. See the comments in
+`jazzy_tabler/templates/jazzy_tabler/includes/navbar_extra.html`.
+
 ## Compatibility
 
 - Python 3.10+, Django 4.2+ (developed against the latest Django).
