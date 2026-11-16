@@ -98,6 +98,9 @@
 
                         <!-- User (mobile) -->
                         <div class="navbar-nav flex-row d-lg-none">
+                            {# Same include as the desktop {% block navbar_extra %}: override #}
+                            {# jazzy_tabler/includes/navbar_extra.html to cover both. #}
+                            {% include 'jazzy_tabler/includes/navbar_extra.html' %}
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                                    aria-label="Open user menu">
@@ -273,6 +276,11 @@
                             </a>
                         </div>
                     {% endif %}
+
+                    {# Extension point: extra top-navbar items (docs links, status badges, ...). #}
+                    {# Override the include (via your app's templates dir) or extend this block. #}
+                    {# Rendered again in the mobile (d-lg-none) navbar inside the sidebar header. #}
+                    {% block navbar_extra %}{% include 'jazzy_tabler/includes/navbar_extra.html' %}{% endblock navbar_extra %}
 
                     {% if jazzy_settings.language_chooser %}
                         {% get_available_languages as LANGUAGES %}
