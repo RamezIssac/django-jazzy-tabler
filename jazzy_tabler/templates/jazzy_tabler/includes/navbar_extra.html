@@ -1,0 +1,24 @@
+{# Extra top-navbar items — intentionally empty by default. #}
+{# #}
+{# This include is rendered in two places by jazzy_tabler's admin/base.html: #}
+{#   - the desktop top navbar (inside the right-hand .navbar-nav cluster) and #}
+{#   - the mobile navbar (d-lg-none) in the sidebar header. #}
+{# #}
+{# To add items, either: #}
+{#   1. Ship your own "jazzy_tabler/includes/navbar_extra.html" in an app #}
+{#      listed BEFORE "jazzy_tabler" in INSTALLED_APPS (overrides this file), or #}
+{#   2. Extend "admin/base.html" and override {% block navbar_extra %}. #}
+{# #}
+{# Use Tabler navbar markup; for a text/button item next to the built-in #}
+{# icon buttons, mirror the theme's own items (spacing utilities like me-3 #}
+{# are RTL-safe — Bootstrap flips them automatically): #}
+{# #}
+{#   <div class="nav-item d-none d-md-flex me-3"> #}
+{#       <a class="btn btn-ghost-secondary" href="..."> #}
+{#           <i class="fas fa-book me-1"></i> Label #}
+{#       </a> #}
+{#   </div> #}
+{# #}
+{# Items are wrapped in .navbar-nav flex-row; visibility classes (d-none, #}
+{# d-md-flex, ...) are yours to choose — remember this include also renders #}
+{# in the mobile navbar. #}
