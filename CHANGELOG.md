@@ -5,18 +5,23 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-19
+
+Version 0.2.0 was tagged but never published to PyPI. This release carries the
+0.2.0 changes below together with the changes listed here.
+
 ### Added
 
 - Top-navbar extension point: `{% block navbar_extra %}` in `admin/base.html`,
   defaulting to an empty `jazzy_tabler/includes/navbar_extra.html` include.
   Apps can inject extra navbar items (docs links, badges, ...) by overriding
-  the include (INSTALLED_APPS order) or extending the block — rendered in both
+  the include (INSTALLED_APPS order) or extending the block, rendered in both
   the desktop top navbar and the mobile `d-lg-none` navbar.
 
 ### Fixed
 
 - Sidebar toggle in RTL: collapsing the sidebar hid it but the main view
-  never widened — the `.page-wrapper` / `header.navbar` offset resets used
+  never widened. The `.page-wrapper` / `header.navbar` offset resets used
   physical `margin-left`, while Tabler applies `margin-inline-start`
   (= `margin-right` in RTL). The resets (collapse, no-sidebar, popup) now
   use the logical property, so they work in both directions.
