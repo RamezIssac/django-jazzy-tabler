@@ -253,7 +253,10 @@ select:not(.form-select):not([multiple]):focus {
 
 .sidebar-collapsed .page-wrapper,
 .sidebar-collapsed header.navbar {
-    margin-left: 0 !important;
+    /* Logical property: Tabler offsets the wrapper with margin-inline-start,
+       which is margin-right in RTL — a physical margin-left reset did
+       nothing there and the content never widened. */
+    margin-inline-start: 0 !important;
 }
 
 /* ============================================================================
@@ -747,18 +750,18 @@ a.button:hover {
    NO-SIDEBAR MODE
    ========================================================================== */
 .no-sidebar .page-wrapper {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 .no-sidebar header.navbar {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 /* ============================================================================
    POPUP MODE
    ========================================================================== */
 .popup .page-wrapper {
-    margin-left: 0;
+    margin-inline-start: 0;
     padding-top: 1rem;
 }
 
