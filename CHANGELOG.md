@@ -5,23 +5,31 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-19
+
 ### Added
 
 - Top-navbar extension point: `{% block navbar_extra %}` in `admin/base.html`,
   defaulting to an empty `jazzy_tabler/includes/navbar_extra.html` include.
   Apps can inject extra navbar items (docs links, badges, ...) by overriding
-  the include (INSTALLED_APPS order) or extending the block — rendered in both
+  the include (INSTALLED_APPS order) or extending the block, rendered in both
   the desktop top navbar and the mobile `d-lg-none` navbar.
-
-### Fixed
-
-- Sidebar toggle in RTL: collapsing the sidebar hid it but the main view
-  never widened — the `.page-wrapper` / `header.navbar` offset resets used
-  physical `margin-left`, while Tabler applies `margin-inline-start`
-  (= `margin-right` in RTL). The resets (collapse, no-sidebar, popup) now
-  use the logical property, so they work in both directions.
-
-## [0.2.0] - 2026-09-27
+- Admin URL-coverage test suite: every inventoried admin URL (login, index,
+  app indexes, per-model changelist/add/change/delete/history, plus
+  searched/filtered/paginated/date-hierarchy states, 404/500 previews) is
+  asserted to render. The inventory is derived from the registered admin site
+  (`demo/admin_inventory.py`).
+- Opt-in Playwright screenshot matrix (`JAZZY_SCREENSHOTS=1`): every
+  inventoried URL captured at desktop viewport in light and dark into
+  `proofs/<run>/`, with browser console errors gating the run.
+- Computed-style layout tests for the theme chrome, FK icons and select2.
+- Demo project: richer `blog` app (tags, authors, comments, M2M with
+  `filter_horizontal`, stacked + tabular inlines, date hierarchy, filters,
+  pagination) with deterministic seeding via `manage.py seed_demo`.
+- Docs: rewritten README; full settings protocol reference in
+  [docs/settings.md](docs/settings.md).
+- `JAZZY_UI_TWEAKS["accent_color"]` is now actually applied (sidebar active
+  item).
 
 ### Changed
 
@@ -43,6 +51,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Sidebar toggle in RTL: collapsing the sidebar hid it but the main view
+  never widened. The `.page-wrapper` / `header.navbar` offset resets used
+  physical `margin-left`, while Tabler applies `margin-inline-start`
+  (= `margin-right` in RTL). The resets (collapse, no-sidebar, popup) now
+  use the logical property, so they work in both directions.
 - Login form was missing the hidden `next` field — logging in from
   `/admin/login/` landed on `/accounts/profile/` (404) instead of the
   dashboard.
@@ -62,25 +75,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   (`a.button` from Django's unloaded widgets.css), the hash summary is muted
   and wraps instead of overflowing, and Django ≥ 5 `.form-hint` help text is
   styled like the old `.helptext`.
-
-### Added
-
-- Admin URL-coverage test suite: every inventoried admin URL (login, index,
-  app indexes, per-model changelist/add/change/delete/history, plus
-  searched/filtered/paginated/date-hierarchy states, 404/500 previews) is
-  asserted to render. The inventory is derived from the registered admin site
-  (`demo/admin_inventory.py`).
-- Opt-in Playwright screenshot matrix (`JAZZY_SCREENSHOTS=1`): every
-  inventoried URL captured at desktop viewport in light and dark into
-  `proofs/<run>/`, with browser console errors gating the run.
-- Computed-style layout tests for the theme chrome, FK icons and select2.
-- Demo project: richer `blog` app (tags, authors, comments, M2M with
-  `filter_horizontal`, stacked + tabular inlines, date hierarchy, filters,
-  pagination) with deterministic seeding via `manage.py seed_demo`.
-- Docs: rewritten README; full settings protocol reference in
-  [docs/settings.md](docs/settings.md).
-- `JAZZY_UI_TWEAKS["accent_color"]` is now actually applied (sidebar active
-  item).
 
 ## [0.1.1] and earlier
 
