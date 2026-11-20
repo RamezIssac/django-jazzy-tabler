@@ -117,21 +117,3 @@ def test_forced_colors_keep_boundaries(demo_server, browser):
     assert card == "solid"
     assert active.evaluate("el => getComputedStyle(el).outlineStyle") == "solid"
     context.close()
-
-
-@pytest.mark.screenshots
-@requires_screenshots
-def test_text_selection_uses_theme_tint(demo_server, browser):
-    context = fresh_context(browser, demo_server.base_url, "light")
-    page = context.new_page()
-    login(page, demo_server.base_url)
-    page.goto(f"{demo_server.base_url}/admin/", wait_until="networkidle")
-
-    selection, tint = page.evaluate(
-        """() => { const probe = document.createElement('span');
-          probe.style.backgroundColor = 'color-mix(in oklab, var(--tblr-primary) 28%, transparent)'; document.body.append(probe);
-          const out = [getComputedStyle(document.body, '::selection').backgroundColor, getComputedStyle(probe).backgroundColor];
-          probe.remove(); return out; }"""
-    )
-    assert selection == tint
-    context.close()

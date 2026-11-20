@@ -765,15 +765,11 @@ a.button:hover {
 
 /* ============================================================================
    BROWSER UI AND ACCESSIBILITY
-   Native controls, selection and keyboard focus follow the theme tokens.
+   Native controls and keyboard focus follow the theme tokens.
    ========================================================================== */
 :root,
 [data-bs-theme] {
     accent-color: var(--tblr-link-color);
-}
-
-::selection {
-    background-color: color-mix(in oklab, var(--tblr-primary) 28%, transparent);
 }
 
 /* Tabler's focus ring is a translucent box-shadow only, which fails 3:1 and vanishes in forced colours. */
