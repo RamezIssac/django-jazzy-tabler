@@ -762,3 +762,35 @@ a.button:hover {
     padding-top: 1rem;
 }
 
+
+/* ============================================================================
+   BROWSER UI AND ACCESSIBILITY
+   Native controls and keyboard focus follow the theme tokens.
+   ========================================================================== */
+:root,
+[data-bs-theme] {
+    accent-color: var(--tblr-link-color);
+}
+
+/* Tabler's focus ring is a translucent box-shadow only, which fails 3:1 and vanishes in forced colours. */
+:is(.btn, .nav-link, .dropdown-item, .page-link, a, button, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--tblr-link-color);
+    outline-offset: 2px;
+}
+
+:is(.form-control, .form-select, input, select, textarea, .select2-selection):focus-visible {
+    outline: 2px solid var(--tblr-link-color);
+    outline-offset: -1px;
+}
+
+@media (forced-colors: active) {
+    .card,
+    .jazzy-actions-bottom {
+        border: 1px solid CanvasText !important;
+    }
+
+    #jazzy-sidebar :is(.nav-link, .dropdown-item).active {
+        outline: 2px solid Highlight;
+        outline-offset: -2px;
+    }
+}

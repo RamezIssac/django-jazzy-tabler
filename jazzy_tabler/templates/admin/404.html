@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <title>{% trans 'Page not found' %} (404)</title>
     <script>
         (function () {
@@ -13,6 +14,7 @@
                 mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
             }
             document.documentElement.setAttribute('data-bs-theme', mode);
+            document.querySelector('meta[name=color-scheme]').setAttribute('content', mode);
         })();
     </script>
     <link rel="stylesheet" href="{% static "vendor/fontawesome-free/css/all.min.css" %}">
