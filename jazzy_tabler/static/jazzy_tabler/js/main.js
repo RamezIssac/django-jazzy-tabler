@@ -76,6 +76,8 @@
             var current = document.documentElement.getAttribute('data-bs-theme');
             var next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-bs-theme', next);
+            var schemeMeta = document.querySelector('meta[name=color-scheme]');
+            if (schemeMeta) schemeMeta.setAttribute('content', next);
             localStorage.setItem('jazzy-theme-mode', next);
             updateIcons();
         });

@@ -13,6 +13,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   the include (INSTALLED_APPS order) or extending the block — rendered in both
   the desktop top navbar and the mobile `d-lg-none` navbar.
 
+### Fixed
+
+- Keyboard focus is visible: a 2px `:focus-visible` outline in the link colour
+  on buttons, links, nav items and form fields. Tabler drew only a translucent
+  box-shadow ring, below 3:1 contrast and lost in forced-colours mode.
+- Forced-colours (Windows High Contrast) mode keeps card and action-bar borders
+  and outlines the active sidebar link.
+- Native checkboxes, radios and range inputs use the theme link colour
+  (`accent-color`) in light and dark mode, including inside the dark sidebar.
+- `<meta name="color-scheme">` on the admin, login and error pages, kept in sync
+  with the stored theme mode and the dark-mode toggle.
+- Text selection uses a tint of the primary colour.
+
 ## [0.2.0] - 2026-09-27
 
 ### Changed
