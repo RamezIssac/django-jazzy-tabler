@@ -834,7 +834,7 @@ a.button:hover {
 /* Tabs: underline, the active tab carries a bar in the link colour (AA in every skin). */
 .change-form #content-main .nav-tabs {
     gap: 1.5rem;
-    margin: 0 -1.5rem 0 !important;
+    margin: 0 -1.5rem !important;
     padding: 0 1.5rem;
     border-bottom: var(--tblr-border-width) solid var(--tblr-border-color);
 }
@@ -900,7 +900,7 @@ a.button:hover {
 }
 
 /* Width by data type: text and choices share one measure, long text gets more, numbers and dates stay compact. */
-.change-form .form-group .col-sm-9 > input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.change-form .form-group .col-sm-9 > input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="number"]),
 .change-form .form-group .col-sm-9 > select,
 .change-form .form-group .col-sm-9 > .related-widget-wrapper {
     width: 100%;
@@ -977,18 +977,15 @@ a.button:hover {
     padding: .875rem 1.5rem;
     background: var(--tblr-bg-surface);
     border: var(--tblr-border-width) solid var(--tblr-border-color);
-    border-top-color: var(--tblr-border-color);
     border-radius: 0 0 var(--tblr-border-radius-lg) var(--tblr-border-radius-lg);
     box-shadow: 0 -6px 16px -12px color-mix(in srgb, var(--tblr-shadow-color) 60%, transparent);
 }
 
-.change-form .jazzy-actions-bottom > .d-flex,
-.change-form #jazzy-actions > .d-flex {
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) > .d-flex {
     width: 100%;
 }
 
-.change-form .jazzy-actions-bottom input[name="_save"],
-.change-form #jazzy-actions input[name="_save"] {
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) input[name="_save"] {
     --tblr-btn-bg: var(--tblr-primary);
     --tblr-btn-color: var(--tblr-primary-fg);
     --tblr-btn-hover-bg: var(--tblr-primary-darken);
@@ -998,12 +995,7 @@ a.button:hover {
     min-width: 6.5rem;
 }
 
-.change-form .jazzy-actions-bottom input[name="_continue"],
-.change-form .jazzy-actions-bottom input[name="_addanother"],
-.change-form .jazzy-actions-bottom input[name="_saveasnew"],
-.change-form #jazzy-actions input[name="_continue"],
-.change-form #jazzy-actions input[name="_addanother"],
-.change-form #jazzy-actions input[name="_saveasnew"] {
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) input:is([name="_continue"], [name="_addanother"], [name="_saveasnew"]) {
     --tblr-btn-bg: transparent;
     --tblr-btn-color: var(--tblr-body-color);
     --tblr-btn-border-color: var(--tblr-border-color);
@@ -1015,8 +1007,7 @@ a.button:hover {
     box-shadow: none;
 }
 
-.change-form .jazzy-actions-bottom a[href*="/delete/"],
-.change-form #jazzy-actions a[href*="/delete/"] {
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) a[href*="/delete/"] {
     --tblr-btn-bg: transparent;
     --tblr-btn-color: var(--tblr-danger);
     --tblr-btn-border-color: transparent;
@@ -1043,10 +1034,6 @@ a.button:hover {
     .change-form #content-main > form > .card > .jazzy-actions-bottom {
         padding-inline: 1rem;
     }
-}
-
-.change-form .form-group .col-sm-9 > input[type="number"]:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
-    max-width: 10rem;
 }
 
 /* select2 writes an inline width; the sheet measure wins. */

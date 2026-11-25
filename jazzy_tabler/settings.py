@@ -185,10 +185,6 @@ def get_settings() -> Dict[str, Any]:
     return jazzy_settings
 
 
-def skin_stylesheet(name: str) -> str:
-    return static(f"jazzy_tabler/css/skins/{name}.css")
-
-
 def get_ui_tweaks() -> Dict[str, Any]:
     raw_tweaks = copy.deepcopy(DEFAULT_UI_TWEAKS)
     user_tweaks = getattr(settings, "JAZZY_UI_TWEAKS", {})
@@ -204,6 +200,7 @@ def get_ui_tweaks() -> Dict[str, Any]:
         logger.warning("skin must be one of %s; using the stock theme", ", ".join(SKINS))
         skin = None
     skin_chooser = bool(raw_tweaks.get("skin_chooser"))
+    skin_stylesheets = {name: static(f"jazzy_tabler/css/skins/{name}.css") for name in SKINS}
 
     navbar_data_theme = "dark" if raw_tweaks.get("navbar") == "dark" else ""
     sidebar_data_theme = "dark" if raw_tweaks.get("sidebar", "dark") == "dark" else ""
@@ -218,9 +215,9 @@ def get_ui_tweaks() -> Dict[str, Any]:
         "footer_fixed": raw_tweaks.get("footer_fixed", False),
         "accent_color": raw_tweaks.get("accent_color", "primary"),
         "skin": skin or None,
-        "skin_href": skin_stylesheet(skin) if skin else None,
+        "skin_href": skin_stylesheets.get(skin),
         "skin_chooser": skin_chooser,
-        "skin_stylesheets": {name: skin_stylesheet(name) for name in SKINS} if skin_chooser else {},
+        "skin_stylesheets": skin_stylesheets if skin_chooser else {},
         "button_classes": raw_tweaks.get("button_classes", DEFAULT_UI_TWEAKS["button_classes"]),
     }
 

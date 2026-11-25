@@ -108,14 +108,9 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                                    aria-label="Open user menu">
-                                    {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                        {% get_user_avatar request.user as avatar_url %}
-                                        {% if avatar_url %}
-                                            <span class="avatar avatar-sm"
-                                                  style="background-image: url({{ avatar_url }})"></span>
-                                        {% else %}
-                                            <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
-                                        {% endif %}
+                                    {% get_user_avatar request.user as avatar_url %}
+                                    {% if avatar_url %}
+                                        <span class="avatar avatar-sm" style="background-image: url({{ avatar_url }})"></span>
                                     {% else %}
                                         <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                                     {% endif %}
@@ -140,14 +135,9 @@
 
                             {% if jazzy_settings|has_jazzy_setting:"user_avatar" or True %}
                                 <div class="d-flex align-items-center py-3 d-none d-lg-flex border-bottom mb-3">
-                                    {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                        {% get_user_avatar request.user as avatar_url %}
-                                        {% if avatar_url %}
-                                            <span class="avatar avatar-sm me-2"
-                                                  style="background-image: url({{ avatar_url }})"></span>
-                                        {% else %}
-                                            <span class="jazzy-user-icon me-2"><i class="fas fa-cog"></i></span>
-                                        {% endif %}
+                                    {% get_user_avatar request.user as avatar_url %}
+                                    {% if avatar_url %}
+                                        <span class="avatar avatar-sm me-2" style="background-image: url({{ avatar_url }})"></span>
                                     {% else %}
                                         <span class="jazzy-user-icon me-2"><i class="fas fa-cog"></i></span>
                                     {% endif %}
@@ -327,14 +317,9 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                            aria-label="{% trans 'Account' %}">
-                            {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                {% get_user_avatar request.user as avatar_url %}
-                                {% if avatar_url %}
-                                    <span class="avatar avatar-sm"
-                                          style="background-image: url({{ avatar_url }})"></span>
-                                {% else %}
-                                    <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
-                                {% endif %}
+                            {% get_user_avatar request.user as avatar_url %}
+                            {% if avatar_url %}
+                                <span class="avatar avatar-sm" style="background-image: url({{ avatar_url }})"></span>
                             {% else %}
                                 <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                             {% endif %}

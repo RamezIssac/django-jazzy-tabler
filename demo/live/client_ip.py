@@ -24,25 +24,24 @@ def _parse(raw):
         return None
 
 
+CLOUDFLARE = _networks(CLOUDFLARE_RANGES)
+TRUSTED = _networks(LOOPBACK_RANGES) + CLOUDFLARE + _networks(os.getenv("TRUSTED_PROXY_CIDRS", "").split(","))
+
+
 def client_ip(request) -> str:
     """Peel trusted proxies off the right of X-Forwarded-For + REMOTE_ADDR; the first untrusted hop is the client."""
-    extra = _networks(os.getenv("TRUSTED_PROXY_CIDRS", "").split(","))
-    cloudflare = _networks(CLOUDFLARE_RANGES)
-    trusted = _networks(LOOPBACK_RANGES) + cloudflare + extra
-
     forwarded = request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")
-    hops = [_parse(raw) for raw in forwarded + [request.META.get("REMOTE_ADDR", "")] if raw.strip()]
-    chain = [hop for hop in hops if hop]
+    chain = [hop for raw in forwarded + [request.META.get("REMOTE_ADDR", "")] if (hop := _parse(raw))]
     peer = chain[-1] if chain else None
     if peer is None:
         return request.META.get("REMOTE_ADDR", "") or "0.0.0.0"
-    if not any(peer in net for net in trusted):
+    if not any(peer in net for net in TRUSTED):
         return str(peer)
 
     cf_header = _parse(request.META.get("HTTP_CF_CONNECTING_IP", ""))
-    if cf_header and any(peer in net for net in cloudflare):
+    if cf_header and any(peer in net for net in CLOUDFLARE):
         return str(cf_header)
     for hop in reversed(chain):
-        if not any(hop in net for net in trusted):
+        if not any(hop in net for net in TRUSTED):
             return str(hop)
     return str(chain[0])

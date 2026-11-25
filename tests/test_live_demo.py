@@ -61,26 +61,22 @@ def test_reset_restores_the_seeded_data(seeded):
     Post.objects.filter(pk__in=Post.objects.values("pk")[:5]).delete()
     Post.objects.update(title="defaced")
 
+    viewer = ensure_viewer("demo", "pw")
+
     summary = reset()
 
     assert summary["posts"] == 26
     assert not Post.objects.filter(title="defaced").exists()
+    viewer.refresh_from_db()
+    assert "blog.view_post" in viewer.get_all_permissions()
 
 
 @pytest.mark.django_db
-def test_turnstile_refuses_a_login_without_a_token(settings, admin_user):
-    settings.TURNSTILE_SITE_KEY, settings.TURNSTILE_SECRET_KEY = "site", "secret"
+@pytest.mark.parametrize(("keys", "valid"), [(("site", "secret"), False), (("", ""), True)])
+def test_turnstile_refuses_a_tokenless_login_only_when_configured(settings, admin_user, keys, valid):
+    settings.TURNSTILE_SITE_KEY, settings.TURNSTILE_SECRET_KEY = keys
     request = RequestFactory().post("/admin/login/")
     form = TurnstileAuthenticationForm(request, data={"username": "admin", "password": "password"})
 
-    assert not form.is_valid()
-    assert "Captcha check failed" in str(form.errors)
-
-
-@pytest.mark.django_db
-def test_turnstile_is_off_without_keys(settings, admin_user):
-    settings.TURNSTILE_SITE_KEY, settings.TURNSTILE_SECRET_KEY = "", ""
-    request = RequestFactory().post("/admin/login/")
-    form = TurnstileAuthenticationForm(request, data={"username": "admin", "password": "password"})
-
-    assert form.is_valid()
+    assert form.is_valid() is valid
+    assert ("Captcha check failed" in str(form.errors)) is not valid

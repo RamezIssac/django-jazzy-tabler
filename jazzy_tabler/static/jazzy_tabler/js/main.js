@@ -83,10 +83,10 @@
         });
     }
 
-    // Same mechanism as the mode toggle: an attribute on <html> plus a localStorage key the head script restores.
+    // Same mechanism as the mode toggle: an attribute on <html> that the head script stores and restores.
     function initSkinChooser() {
         var $choices = $('[data-jazzy-skin-choice]');
-        if (!$choices.length || !window.jazzyApplySkin) return;
+        if (!$choices.length || !window.jazzyChooseSkin) return;
 
         function markActive() {
             var current = document.documentElement.getAttribute('data-jazzy-skin') || '';
@@ -99,11 +99,7 @@
         markActive();
 
         $choices.on('click', function() {
-            var name = $(this).attr('data-jazzy-skin-choice');
-            if (window.jazzyApplySkin(name)) {
-                localStorage.setItem('jazzy-skin', name);
-                markActive();
-            }
+            if (window.jazzyChooseSkin($(this).attr('data-jazzy-skin-choice'))) markActive();
         });
     }
 

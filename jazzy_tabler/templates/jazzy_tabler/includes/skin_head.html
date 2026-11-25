@@ -1,13 +1,15 @@
 {# Skin stylesheet, after main.css and before custom_css. With the chooser on, the stored pick is applied before first paint. #}
-{% if jazzy_ui.skin_chooser %}
+{% if jazzy_ui.skin or jazzy_ui.skin_chooser %}
     <link rel="stylesheet" id="jazzy-skin-css"{% if jazzy_ui.skin %} href="{{ jazzy_ui.skin_href }}"{% endif %}>
+{% endif %}
+{% if jazzy_ui.skin_chooser %}
     {{ jazzy_ui.skin_stylesheets|json_script:"jazzy-skin-stylesheets" }}
     <script>
         (function () {
             var sheets = JSON.parse(document.getElementById('jazzy-skin-stylesheets').textContent);
             var link = document.getElementById('jazzy-skin-css');
             // An empty name is the stock theme; names missing from the map (a removed skin) are ignored.
-            window.jazzyApplySkin = function (name) {
+            function apply(name) {
                 if (name && !Object.prototype.hasOwnProperty.call(sheets, name)) return false;
                 if (name) {
                     document.documentElement.setAttribute('data-jazzy-skin', name);
@@ -17,11 +19,14 @@
                     link.removeAttribute('href');
                 }
                 return true;
+            }
+            window.jazzyChooseSkin = function (name) {
+                if (!apply(name)) return false;
+                localStorage.setItem('jazzy-skin', name);
+                return true;
             };
             var stored = localStorage.getItem('jazzy-skin');
-            if (stored !== null) window.jazzyApplySkin(stored);
+            if (stored !== null) apply(stored);
         })();
     </script>
-{% elif jazzy_ui.skin %}
-    <link rel="stylesheet" id="jazzy-skin-css" href="{{ jazzy_ui.skin_href }}">
 {% endif %}

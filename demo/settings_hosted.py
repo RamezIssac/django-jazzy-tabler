@@ -37,7 +37,6 @@ DATABASES = {
     }
 }
 
-STATIC_URL = "/static/"
 STATIC_ROOT = os.environ["STATIC_ROOT"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.environ["MEDIA_ROOT"]
