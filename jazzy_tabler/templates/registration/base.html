@@ -9,6 +9,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <script>
         (function() {
@@ -17,6 +18,7 @@
                 mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
             }
             document.documentElement.setAttribute('data-bs-theme', mode);
+            document.querySelector('meta[name=color-scheme]').setAttribute('content', mode);
         })();
     </script>
 
