@@ -5,6 +5,32 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Skins: ten CSS-only skins (`major`, `minor`, `tritone`, `sus4`, `dominant`,
+  `harmonic-minor`, `lydian`, `blue-note`, `altered`, `dorian`) chosen with
+  `JAZZY_UI_TWEAKS["skin"]`. The skin sets `data-jazzy-skin` on `<html>` and
+  loads one stylesheet after the theme's on the admin, login and error pages.
+  An unknown name logs a warning and falls back to stock. Bundled OFL fonts
+  (Inter, Geist, IBM Plex Sans, Plus Jakarta Sans, Source Serif 4).
+- Skin chooser: `JAZZY_UI_TWEAKS["skin_chooser"] = True` adds a palette menu
+  next to the dark-mode toggle. The pick is kept in `localStorage` like the
+  theme mode; the configured `skin` stays the default.
+- `{% block login_extra %}` in `admin/login.html` for login hints or a captcha.
+- Demo: `seed_demo --reset`, real migrations for the `blog` app, and a
+  `demo.settings_hosted` deployment (read-only demo account, periodic data
+  reset, Turnstile and django-axes on the login).
+
+### Changed
+
+- Change form redesign: one sheet with a fixed label gutter, fields sized by
+  data type, underline tabs, a sticky action bar with one primary Save and
+  Delete at the far end, quieter stacked inlines, a compact date/time row.
+- The account menu shows a cog icon when no `user_avatar` image is set.
+- Top search icon centred on the small search input; pagination spacing below
+  the changelist table; the select2 clear button sits before the arrow;
+  single-page change forms open inline sections with a heading.
+
 ### Fixed
 
 - Keyboard focus is visible: a 2px `:focus-visible` outline in the link colour

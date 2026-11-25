@@ -1,7 +1,8 @@
-{% load i18n static %}
+{% load i18n static jazzy_tabler %}
+{% get_jazzy_ui_tweaks as jazzy_ui %}
 <!DOCTYPE html>
 {# Standalone error page: no sidebar/navbar chrome, only navigation back home. #}
-<html lang="en">
+<html lang="en"{% if jazzy_ui.skin %} data-jazzy-skin="{{ jazzy_ui.skin }}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="{% static "vendor/fontawesome-free/css/all.min.css" %}">
     <link rel="stylesheet" href="{% static "vendor/tabler/css/tabler.min.css" %}">
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+    {% include "jazzy_tabler/includes/skin_head.html" %}
 </head>
 <body class="antialiased">
     <div class="page page-center">

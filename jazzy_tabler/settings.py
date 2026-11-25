@@ -100,6 +100,10 @@ DEFAULT_UI_TWEAKS: Dict[str, Any] = {
     "default_theme_mode": "light",
     # Accent color for the sidebar active item
     "accent_color": "primary",
+    # CSS-only skin from SKINS (None = stock Tabler); it owns the sidebar, navbar and accent colours
+    "skin": None,
+    # Show a skin menu next to the dark-mode toggle; the visitor's pick is kept in localStorage
+    "skin_chooser": False,
     # Button classes
     "button_classes": {
         "primary": "btn-primary",
@@ -110,6 +114,20 @@ DEFAULT_UI_TWEAKS: Dict[str, Any] = {
         "success": "btn-success",
     },
 }
+
+# Each name has a stylesheet at jazzy_tabler/static/jazzy_tabler/css/skins/<name>.css.
+SKINS = (
+    "major",
+    "minor",
+    "tritone",
+    "sus4",
+    "dominant",
+    "harmonic-minor",
+    "lydian",
+    "blue-note",
+    "altered",
+    "dorian",
+)
 
 CHANGEFORM_TEMPLATES = {
     "single": "jazzy_tabler/includes/single.html",
@@ -167,6 +185,10 @@ def get_settings() -> Dict[str, Any]:
     return jazzy_settings
 
 
+def skin_stylesheet(name: str) -> str:
+    return static(f"jazzy_tabler/css/skins/{name}.css")
+
+
 def get_ui_tweaks() -> Dict[str, Any]:
     raw_tweaks = copy.deepcopy(DEFAULT_UI_TWEAKS)
     user_tweaks = getattr(settings, "JAZZY_UI_TWEAKS", {})
@@ -176,6 +198,12 @@ def get_ui_tweaks() -> Dict[str, Any]:
     if default_theme_mode not in ("light", "dark", "auto"):
         logger.warning("default_theme_mode must be light, dark, or auto; using light")
         default_theme_mode = "light"
+
+    skin = raw_tweaks.get("skin")
+    if skin and skin not in SKINS:
+        logger.warning("skin must be one of %s; using the stock theme", ", ".join(SKINS))
+        skin = None
+    skin_chooser = bool(raw_tweaks.get("skin_chooser"))
 
     navbar_data_theme = "dark" if raw_tweaks.get("navbar") == "dark" else ""
     sidebar_data_theme = "dark" if raw_tweaks.get("sidebar", "dark") == "dark" else ""
@@ -189,6 +217,10 @@ def get_ui_tweaks() -> Dict[str, Any]:
         "sidebar_data_theme": sidebar_data_theme,
         "footer_fixed": raw_tweaks.get("footer_fixed", False),
         "accent_color": raw_tweaks.get("accent_color", "primary"),
+        "skin": skin or None,
+        "skin_href": skin_stylesheet(skin) if skin else None,
+        "skin_chooser": skin_chooser,
+        "skin_stylesheets": {name: skin_stylesheet(name) for name in SKINS} if skin_chooser else {},
         "button_classes": raw_tweaks.get("button_classes", DEFAULT_UI_TWEAKS["button_classes"]),
     }
 

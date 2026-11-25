@@ -5,7 +5,7 @@
 {% get_jazzy_ui_tweaks as jazzy_ui %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}{% if jazzy_ui.skin %} data-jazzy-skin="{{ jazzy_ui.skin }}"{% endif %}
       data-bs-navbar-position="vertical">
 <head>
     <meta charset="utf-8">
@@ -38,6 +38,8 @@
 
     <!-- Django-specific fixes -->
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+
+    {% include "jazzy_tabler/includes/skin_head.html" %}
 
     {% if jazzy_ui.accent_color and jazzy_ui.accent_color != "primary" %}
         <style>
@@ -112,10 +114,10 @@
                                             <span class="avatar avatar-sm"
                                                   style="background-image: url({{ avatar_url }})"></span>
                                         {% else %}
-                                            <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                            <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                                         {% endif %}
                                     {% else %}
-                                        <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                        <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                                     {% endif %}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -144,10 +146,10 @@
                                             <span class="avatar avatar-sm me-2"
                                                   style="background-image: url({{ avatar_url }})"></span>
                                         {% else %}
-                                            <span class="avatar avatar-sm me-2"><i class="fas fa-user"></i></span>
+                                            <span class="jazzy-user-icon me-2"><i class="fas fa-cog"></i></span>
                                         {% endif %}
                                     {% else %}
-                                        <span class="avatar avatar-sm me-2"><i class="fas fa-user"></i></span>
+                                        <span class="jazzy-user-icon me-2"><i class="fas fa-cog"></i></span>
                                     {% endif %}
                                     <div class="flex-fill">
                                         {% if perms|can_view_self %}
@@ -308,6 +310,10 @@
                         </div>
                     {% endif %}
 
+                    {% if jazzy_ui.skin_chooser %}
+                        {% include "jazzy_tabler/includes/skin_chooser.html" %}
+                    {% endif %}
+
                     <!-- Dark/Light mode toggle -->
                     <div class="nav-item d-none d-md-flex me-3">
                         <a class="btn btn-ghost-secondary btn-icon" href="#" id="jazzy-mode-toggle"
@@ -327,10 +333,10 @@
                                     <span class="avatar avatar-sm"
                                           style="background-image: url({{ avatar_url }})"></span>
                                 {% else %}
-                                    <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                    <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                                 {% endif %}
                             {% else %}
-                                <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                             {% endif %}
                             <div class="d-none d-xl-block ps-2">
                                 <div class="small fw-bold">{{ request.user }}</div>

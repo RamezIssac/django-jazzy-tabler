@@ -5,7 +5,7 @@
 {% get_jazzy_ui_tweaks as jazzy_ui %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}{% if jazzy_ui.skin %} data-jazzy-skin="{{ jazzy_ui.skin }}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,6 +36,8 @@
 
     <!-- Django-specific fixes -->
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+
+    {% include "jazzy_tabler/includes/skin_head.html" %}
 
     {% if jazzy_settings.custom_css %}
     <link rel="stylesheet" href="{% static jazzy_settings.custom_css %}">

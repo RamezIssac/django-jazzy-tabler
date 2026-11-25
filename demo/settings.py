@@ -50,7 +50,6 @@ DATABASES = {
     }
 }
 
-MIGRATION_MODULES = {"blog": None}
 
 STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -80,3 +79,9 @@ JAZZY_SETTINGS = {
 _changeform_format = os.environ.get("DEMO_CHANGEFORM_FORMAT")
 if _changeform_format:
     JAZZY_SETTINGS["changeform_format"] = _changeform_format
+
+JAZZY_UI_TWEAKS = {"skin_chooser": True}
+
+# Screenshot and review variant: DEMO_SKIN=<name> boots the demo with that skin as the configured default.
+if os.environ.get("DEMO_SKIN"):
+    JAZZY_UI_TWEAKS["skin"] = os.environ["DEMO_SKIN"]
