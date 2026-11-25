@@ -127,3 +127,33 @@ def seed(create_superuser: bool = False, verbosity: int = 1) -> dict:
         }
     )
     return summary
+
+
+def reset(create_superuser: bool = False, verbosity: int = 1) -> dict:
+    """Delete everything ``seed()`` creates, then seed again."""
+    from django.contrib.admin.models import LogEntry
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
+
+    from demo.blog.models import Author, Category, Comment, Post, Tag
+
+    for model in (Comment, Post, Tag, Category, Author, LogEntry):
+        model.objects.all().delete()
+    get_user_model().objects.filter(username__in=["editor", "admin"]).delete()
+    Group.objects.filter(name__in=["Editors", "Viewers"]).delete()
+    return seed(create_superuser=create_superuser, verbosity=verbosity)
+
+
+def ensure_viewer(username: str, password: str):
+    """A staff account whose only permissions come from the view-only Viewers group."""
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
+
+    user, _ = get_user_model().objects.get_or_create(username=username)
+    user.is_staff, user.is_superuser, user.is_active = True, False, True
+    if not user.check_password(password):
+        user.set_password(password)
+    user.save()
+    user.user_permissions.clear()
+    user.groups.set([Group.objects.get(name="Viewers")])
+    return user
