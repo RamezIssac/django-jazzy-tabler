@@ -7,7 +7,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/login.png",
-    "bytes": 20719
+    "bytes": 20635
   },
   {
     "mode": "light",
@@ -27,7 +27,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/password-change.png",
-    "bytes": 61437
+    "bytes": 61266
   },
   {
     "mode": "light",
@@ -81,7 +81,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-group-add.png",
-    "bytes": 123645
+    "bytes": 122534
   },
   {
     "mode": "light",
@@ -111,7 +111,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-user-add.png",
-    "bytes": 81493
+    "bytes": 80904
   },
   {
     "mode": "light",
@@ -121,7 +121,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/auth-user-change.png",
-    "bytes": 74317
+    "bytes": 74171
   },
   {
     "mode": "light",
@@ -131,7 +131,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/app-blog.png",
-    "bytes": 48214
+    "bytes": 48213
   },
   {
     "mode": "light",
@@ -151,7 +151,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-category-add.png",
-    "bytes": 50975
+    "bytes": 50951
   },
   {
     "mode": "light",
@@ -161,7 +161,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-category-change.png",
-    "bytes": 52580
+    "bytes": 52579
   },
   {
     "mode": "light",
@@ -171,7 +171,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist.png",
-    "bytes": 156307
+    "bytes": 156304
   },
   {
     "mode": "light",
@@ -211,7 +211,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-add.png",
-    "bytes": 70530
+    "bytes": 70498
   },
   {
     "mode": "light",
@@ -221,7 +221,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-change.png",
-    "bytes": 89775
+    "bytes": 89779
   },
   {
     "mode": "light",
@@ -241,7 +241,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-history.png",
-    "bytes": 60607
+    "bytes": 60084
   },
   {
     "mode": "light",
@@ -251,7 +251,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-category-open.png",
-    "bytes": 58402
+    "bytes": 58337
   },
   {
     "mode": "light",
@@ -261,7 +261,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-author-open.png",
-    "bytes": 63593
+    "bytes": 63525
   },
   {
     "mode": "light",
@@ -281,7 +281,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-add-stacked.png",
-    "bytes": 118521
+    "bytes": 116893
   },
   {
     "mode": "light",
@@ -291,7 +291,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-change-stacked.png",
-    "bytes": 174640
+    "bytes": 174673
   },
   {
     "mode": "dark",
