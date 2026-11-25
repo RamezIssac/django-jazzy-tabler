@@ -76,16 +76,19 @@ def seed(create_superuser: bool = False, verbosity: int = 1) -> dict:
                 text=f"Seeded comment {j + 1} on “{post.title[:32]}…”.",
             )
 
-    editors = Group.objects.create(name="Editors")
-    viewers = Group.objects.create(name="Viewers")
+    editors, _ = Group.objects.get_or_create(name="Editors")
+    viewers, _ = Group.objects.get_or_create(name="Viewers")
     blog_permissions = Permission.objects.filter(content_type__app_label="blog")
     editors.permissions.set(blog_permissions)
     viewers.permissions.set(blog_permissions.filter(codename__startswith="view_"))
 
     User = get_user_model()
-    editor = User.objects.create_user(
-        username="editor", email="editor@example.com", password="unused", is_staff=True
+    # History author only: it can edit the blog, so it must never be able to log in.
+    editor, _ = User.objects.get_or_create(
+        username="editor", defaults={"email": "editor@example.com", "is_staff": True}
     )
+    editor.set_unusable_password()
+    editor.save()
     editor.groups.add(editors)
 
     def log(obj, message, flag=CHANGE):
@@ -107,7 +110,7 @@ def seed(create_superuser: bool = False, verbosity: int = 1) -> dict:
     for obj in (categories[0], tags[0], authors[0], editors, editor):
         log(obj, "Seeded change so the history view has entries.")
 
-    if create_superuser:
+    if create_superuser and not User.objects.filter(username="admin").exists():
         import os
 
         password = os.environ.get("DEMO_ADMIN_PASSWORD", "admin")
@@ -127,3 +130,29 @@ def seed(create_superuser: bool = False, verbosity: int = 1) -> dict:
         }
     )
     return summary
+
+
+def reset(create_superuser: bool = False, verbosity: int = 1) -> dict:
+    """Delete the blog data and the admin history, then seed again; users and groups are kept and reused."""
+    from django.contrib.admin.models import LogEntry
+
+    from demo.blog.models import Author, Category, Comment, Post, Tag
+
+    for model in (Comment, Post, Tag, Category, Author, LogEntry):
+        model.objects.all().delete()
+    return seed(create_superuser=create_superuser, verbosity=verbosity)
+
+
+def ensure_viewer(username: str, password: str):
+    """A staff account whose only permissions come from the view-only Viewers group."""
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
+
+    user, _ = get_user_model().objects.get_or_create(username=username)
+    user.is_staff, user.is_superuser, user.is_active = True, False, True
+    if not user.check_password(password):
+        user.set_password(password)
+    user.save()
+    user.user_permissions.clear()
+    user.groups.set([Group.objects.get(name="Viewers")])
+    return user

@@ -7,11 +7,29 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Top-navbar extension point: `{% block navbar_extra %}` in `admin/base.html`,
-  defaulting to an empty `jazzy_tabler/includes/navbar_extra.html` include.
-  Apps can inject extra navbar items (docs links, badges, ...) by overriding
-  the include (INSTALLED_APPS order) or extending the block — rendered in both
-  the desktop top navbar and the mobile `d-lg-none` navbar.
+- Skins: ten CSS-only skins (`major`, `minor`, `tritone`, `sus4`, `dominant`,
+  `harmonic-minor`, `lydian`, `blue-note`, `altered`, `dorian`) chosen with
+  `JAZZY_UI_TWEAKS["skin"]`. The skin sets `data-jazzy-skin` on `<html>` and
+  loads one stylesheet after the theme's on the admin, login and error pages.
+  An unknown name logs a warning and falls back to stock. Bundled OFL fonts
+  (Inter, Geist, IBM Plex Sans, Plus Jakarta Sans, Source Serif 4).
+- Skin chooser: `JAZZY_UI_TWEAKS["skin_chooser"] = True` adds a palette menu
+  next to the dark-mode toggle. The pick is kept in `localStorage` like the
+  theme mode; the configured `skin` stays the default.
+- `{% block login_extra %}` in `admin/login.html` for login hints or a captcha.
+- Demo: `seed_demo --reset`, real migrations for the `blog` app, and a
+  `demo.settings_hosted` deployment (read-only demo account, periodic data
+  reset, Turnstile and django-axes on the login).
+
+### Changed
+
+- Change form redesign: one sheet with a fixed label gutter, fields sized by
+  data type, underline tabs, a sticky action bar with one primary Save and
+  Delete at the far end, quieter stacked inlines, a compact date/time row.
+- The account menu shows a cog icon when no `user_avatar` image is set.
+- Top search icon centred on the small search input; pagination spacing below
+  the changelist table; the select2 clear button sits before the arrow;
+  single-page change forms open inline sections with a heading.
 
 ### Fixed
 
@@ -25,7 +43,31 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `<meta name="color-scheme">` on the admin, login and error pages, kept in sync
   with the stored theme mode and the dark-mode toggle.
 
-## [0.2.0] - 2026-09-27
+## [0.3.0] - 2026-11-19
+
+### Added
+
+- Top-navbar extension point: `{% block navbar_extra %}` in `admin/base.html`,
+  defaulting to an empty `jazzy_tabler/includes/navbar_extra.html` include.
+  Apps can inject extra navbar items (docs links, badges, ...) by overriding
+  the include (INSTALLED_APPS order) or extending the block, rendered in both
+  the desktop top navbar and the mobile `d-lg-none` navbar.
+- Admin URL-coverage test suite: every inventoried admin URL (login, index,
+  app indexes, per-model changelist/add/change/delete/history, plus
+  searched/filtered/paginated/date-hierarchy states, 404/500 previews) is
+  asserted to render. The inventory is derived from the registered admin site
+  (`demo/admin_inventory.py`).
+- Opt-in Playwright screenshot matrix (`JAZZY_SCREENSHOTS=1`): every
+  inventoried URL captured at desktop viewport in light and dark into
+  `proofs/<run>/`, with browser console errors gating the run.
+- Computed-style layout tests for the theme chrome, FK icons and select2.
+- Demo project: richer `blog` app (tags, authors, comments, M2M with
+  `filter_horizontal`, stacked + tabular inlines, date hierarchy, filters,
+  pagination) with deterministic seeding via `manage.py seed_demo`.
+- Docs: rewritten README; full settings protocol reference in
+  [docs/settings.md](docs/settings.md).
+- `JAZZY_UI_TWEAKS["accent_color"]` is now actually applied (sidebar active
+  item).
 
 ### Changed
 
@@ -47,6 +89,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Sidebar toggle in RTL: collapsing the sidebar hid it but the main view
+  never widened. The `.page-wrapper` / `header.navbar` offset resets used
+  physical `margin-left`, while Tabler applies `margin-inline-start`
+  (= `margin-right` in RTL). The resets (collapse, no-sidebar, popup) now
+  use the logical property, so they work in both directions.
 - Login form was missing the hidden `next` field — logging in from
   `/admin/login/` landed on `/accounts/profile/` (404) instead of the
   dashboard.
@@ -66,25 +113,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   (`a.button` from Django's unloaded widgets.css), the hash summary is muted
   and wraps instead of overflowing, and Django ≥ 5 `.form-hint` help text is
   styled like the old `.helptext`.
-
-### Added
-
-- Admin URL-coverage test suite: every inventoried admin URL (login, index,
-  app indexes, per-model changelist/add/change/delete/history, plus
-  searched/filtered/paginated/date-hierarchy states, 404/500 previews) is
-  asserted to render. The inventory is derived from the registered admin site
-  (`demo/admin_inventory.py`).
-- Opt-in Playwright screenshot matrix (`JAZZY_SCREENSHOTS=1`): every
-  inventoried URL captured at desktop viewport in light and dark into
-  `proofs/<run>/`, with browser console errors gating the run.
-- Computed-style layout tests for the theme chrome, FK icons and select2.
-- Demo project: richer `blog` app (tags, authors, comments, M2M with
-  `filter_horizontal`, stacked + tabular inlines, date hierarchy, filters,
-  pagination) with deterministic seeding via `manage.py seed_demo`.
-- Docs: rewritten README; full settings protocol reference in
-  [docs/settings.md](docs/settings.md).
-- `JAZZY_UI_TWEAKS["accent_color"]` is now actually applied (sidebar active
-  item).
 
 ## [0.1.1] and earlier
 

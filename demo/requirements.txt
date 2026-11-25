@@ -1,0 +1,6 @@
+# Live demo deployment (demo.settings_hosted). The jazzy_tabler package is imported from the repository checkout.
+Django>=6.1,<6.2
+django-axes>=8.0
+psycopg[binary]>=3.2
+python-dotenv>=1.0
+sentry-sdk>=2.0

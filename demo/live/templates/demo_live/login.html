@@ -1,0 +1,28 @@
+{% extends "admin/login.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {% if turnstile_site_key %}
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% endif %}
+{% endblock %}
+
+{% block login_extra %}
+    <div class="alert alert-info" role="note" id="demo-credentials">
+        <div class="fw-bold mb-1">Read-only demo</div>
+        <div>Username <code>{{ demo_username }}</code>, password <code>{{ demo_password }}</code>. Both are filled in for you.</div>
+        <div class="small mt-1">
+            The data resets every {{ demo_reset_hours }} hours{% with last=demo_last_reset %}{% if last %}; last reset {{ last|date:"Y-m-d H:i" }} UTC{% endif %}{% endwith %}.
+            Switch skins from the palette menu next to the dark-mode toggle.
+        </div>
+    </div>
+    {% if turnstile_site_key %}
+        <div class="cf-turnstile mb-3" data-sitekey="{{ turnstile_site_key }}" data-theme="auto"></div>
+    {% endif %}
+    {{ demo_username|json_script:"demo-username" }}
+    {{ demo_password|json_script:"demo-password" }}
+    <script>
+        document.getElementById('id_username').value = JSON.parse(document.getElementById('demo-username').textContent);
+        document.getElementById('id_password').value = JSON.parse(document.getElementById('demo-password').textContent);
+    </script>
+{% endblock %}

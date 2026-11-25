@@ -220,7 +220,7 @@ select:not(.form-select):not([multiple]):focus {
     align-items: center;
     justify-content: center;
     width: 2rem;
-    color: var(--tblr-secondary-color);
+    color: var(--tblr-secondary);
     border-radius: var(--tblr-border-radius);
     transition: color .15s ease-in-out, background-color .15s ease-in-out;
 }
@@ -253,7 +253,10 @@ select:not(.form-select):not([multiple]):focus {
 
 .sidebar-collapsed .page-wrapper,
 .sidebar-collapsed header.navbar {
-    margin-left: 0 !important;
+    /* Logical property: Tabler offsets the wrapper with margin-inline-start,
+       which is margin-right in RTL — a physical margin-left reset did
+       nothing there and the content never widened. */
+    margin-inline-start: 0 !important;
 }
 
 /* ============================================================================
@@ -314,10 +317,25 @@ select:not(.form-select):not([multiple]):focus {
 
 .select2-container--default.select2-container .select2-selection--single .select2-selection__clear,
 .select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__clear {
-    color: var(--tblr-secondary-color);
+    position: absolute;
+    top: 50%;
+    inset-inline-end: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    transform: translateY(-50%);
+    color: var(--tblr-secondary);
     font-size: 1rem;
     line-height: 1;
-    margin-right: .375rem;
+}
+
+/* The clear button sits inside the rendered text: reserve room for it before the arrow. */
+.select2-container--default.select2-container .select2-selection--single .select2-selection__rendered:has(.select2-selection__clear),
+.select2-container--admin-autocomplete.select2-container .select2-selection--single .select2-selection__rendered:has(.select2-selection__clear) {
+    padding-inline-end: 3.5rem;
 }
 
 .select2-container--default.select2-container.select2-container--focus .select2-selection--single,
@@ -747,21 +765,356 @@ a.button:hover {
    NO-SIDEBAR MODE
    ========================================================================== */
 .no-sidebar .page-wrapper {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 .no-sidebar header.navbar {
-    margin-left: 0;
+    margin-inline-start: 0;
 }
 
 /* ============================================================================
    POPUP MODE
    ========================================================================== */
 .popup .page-wrapper {
-    margin-left: 0;
+    margin-inline-start: 0;
     padding-top: 1rem;
 }
 
+
+/* Account menu: plain icon when no user_avatar image is configured (Django has no profile pictures). */
+.jazzy-user-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    font-size: 1rem;
+    color: var(--tblr-secondary);
+}
+
+/* Tabler sizes .input-icon-addon for a regular input; follow the -sm input height instead. */
+.input-icon:has(> .form-control-sm) > .input-icon-addon {
+    height: auto;
+    font-size: 1em;
+}
+
+/* ============================================================================
+   CHANGE FORM SHEET
+   One surface, a fixed label gutter, fields sized by data type, a docked action bar.
+   ========================================================================== */
+.change-form {
+    --jazzy-label-gutter: 13rem;
+    --jazzy-field-w: 34rem;
+    --jazzy-longfield-w: 48rem;
+    --jazzy-row-line: color-mix(in srgb, var(--tblr-border-color) 70%, transparent);
+}
+
+/* The outer card is only a wrapper: the inner card is the sheet. */
+.change-form #content-main > form > .card {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.change-form #content-main > form > .card > .row {
+    --tblr-gutter-x: 0;
+    margin: 0;
+}
+
+.change-form #content-main > form > .card > .row > [class*="col-"] > .card {
+    margin-bottom: 0;
+    border-radius: var(--tblr-border-radius-lg) var(--tblr-border-radius-lg) 0 0;
+}
+
+.change-form #content-main > form > .card > .row > [class*="col-"] > .card > .card-body {
+    padding: 0 1.5rem .5rem;
+}
+
+/* Tabs: underline, the active tab carries a bar in the link colour (AA in every skin). */
+.change-form #content-main .nav-tabs {
+    gap: 1.5rem;
+    margin: 0 -1.5rem !important;
+    padding: 0 1.5rem;
+    border-bottom: var(--tblr-border-width) solid var(--tblr-border-color);
+}
+
+.change-form #content-main .nav-tabs .nav-link {
+    position: relative;
+    padding: 1rem 0 .875rem;
+    border: 0;
+    background: transparent;
+    color: var(--tblr-secondary);
+    font-weight: var(--tblr-font-weight-medium);
+}
+
+.change-form #content-main .nav-tabs .nav-link:hover {
+    color: var(--tblr-body-color);
+}
+
+.change-form #content-main .nav-tabs .nav-link.active {
+    color: var(--tblr-heading-color);
+}
+
+.change-form #content-main .nav-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: calc(-1 * var(--tblr-border-width));
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--tblr-link-color);
+}
+
+/* Field rows: label gutter + control column, hairline between rows. */
+.change-form .tab-pane > .form-group,
+.change-form #content-main > form .card-body > .form-group {
+    margin: 0;
+    padding: 1rem 0;
+    border-bottom: var(--tblr-border-width) solid var(--jazzy-row-line);
+}
+
+.change-form .tab-pane > .form-group:last-of-type {
+    border-bottom: 0;
+}
+
+.change-form .form-group > .row > .col-sm-3.col-form-label {
+    flex: 0 0 var(--jazzy-label-gutter);
+    max-width: var(--jazzy-label-gutter);
+    padding-top: calc(.4375rem + var(--tblr-border-width));
+    padding-bottom: 0;
+    color: var(--tblr-heading-color);
+    font-weight: var(--tblr-font-weight-medium);
+    line-height: 1.5rem;
+}
+
+.change-form .form-group > .row > .col-sm-9 {
+    flex: 1 1 0;
+    max-width: none;
+    min-width: 0;
+}
+
+.change-form .col-form-label .text-danger {
+    margin-inline-start: .125rem;
+    font-weight: var(--tblr-font-weight-normal);
+}
+
+/* Width by data type: text and choices share one measure, long text gets more, numbers and dates stay compact. */
+.change-form .form-group .col-sm-9 > input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="number"]),
+.change-form .form-group .col-sm-9 > select,
+.change-form .form-group .col-sm-9 > .related-widget-wrapper {
+    width: 100%;
+    max-width: var(--jazzy-field-w);
+}
+
+.change-form .form-group .col-sm-9 > textarea {
+    width: 100%;
+    max-width: var(--jazzy-longfield-w);
+    min-height: 8rem;
+}
+
+.change-form .form-group .col-sm-9 > input[type="number"],
+.change-form .form-group .col-sm-9 > input.vIntegerField {
+    max-width: 10rem;
+}
+
+.change-form .form-group .col-sm-9 > .related-widget-wrapper:has(.selector) {
+    max-width: var(--jazzy-longfield-w);
+}
+
+.change-form .form-group .col-sm-9 > input[type="checkbox"] {
+    margin-top: .6875rem;
+}
+
+.change-form .form-hint,
+.change-form .helptext {
+    color: var(--tblr-secondary);
+    max-width: 60ch;
+    margin-top: .375rem;
+}
+
+.change-form .readonly {
+    max-width: var(--jazzy-field-w);
+    background: var(--tblr-bg-surface-secondary);
+    border-color: transparent;
+    color: var(--tblr-body-color);
+}
+
+/* Stacked inlines: quiet sub-sheets inside the tab. */
+.change-form .tab-pane .inline-group {
+    padding-top: 1rem;
+}
+
+.change-form .inline-related > .card {
+    box-shadow: none;
+    border-color: var(--tblr-border-color) !important;
+}
+
+.change-form .inline-related > .card > .card-header {
+    padding-block: .625rem;
+    background: var(--tblr-bg-surface-secondary);
+}
+
+.change-form .inline-related > .card > .card-body {
+    padding: 0 1rem;
+}
+
+.change-form .inline-related .form-group {
+    margin: 0;
+    padding: .75rem 0;
+    border-bottom: var(--tblr-border-width) solid var(--jazzy-row-line);
+}
+
+.change-form .inline-related .card-body > .form-group:last-child {
+    border-bottom: 0;
+}
+
+/* Action bar: docked to the sheet, one primary action, the rest quiet, delete at the far end. */
+.change-form #content-main > form > .card > .jazzy-actions-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    padding: .875rem 1.5rem;
+    background: var(--tblr-bg-surface);
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+    border-radius: 0 0 var(--tblr-border-radius-lg) var(--tblr-border-radius-lg);
+    box-shadow: 0 -6px 16px -12px color-mix(in srgb, var(--tblr-shadow-color) 60%, transparent);
+}
+
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) > .d-flex {
+    width: 100%;
+}
+
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) input[name="_save"] {
+    --tblr-btn-bg: var(--tblr-primary);
+    --tblr-btn-color: var(--tblr-primary-fg);
+    --tblr-btn-hover-bg: var(--tblr-primary-darken);
+    --tblr-btn-hover-color: var(--tblr-primary-fg);
+    --tblr-btn-active-bg: var(--tblr-primary-darken);
+    --tblr-btn-border-color: transparent;
+    min-width: 6.5rem;
+}
+
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) input:is([name="_continue"], [name="_addanother"], [name="_saveasnew"]) {
+    --tblr-btn-bg: transparent;
+    --tblr-btn-color: var(--tblr-body-color);
+    --tblr-btn-border-color: var(--tblr-border-color);
+    --tblr-btn-hover-bg: var(--tblr-bg-surface-secondary);
+    --tblr-btn-hover-color: var(--tblr-heading-color);
+    --tblr-btn-hover-border-color: var(--tblr-border-color);
+    --tblr-btn-active-bg: var(--tblr-bg-surface-secondary);
+    --tblr-btn-active-color: var(--tblr-heading-color);
+    box-shadow: none;
+}
+
+.change-form :is(.jazzy-actions-bottom, #jazzy-actions) a[href*="/delete/"] {
+    --tblr-btn-bg: transparent;
+    --tblr-btn-color: var(--tblr-danger);
+    --tblr-btn-border-color: transparent;
+    --tblr-btn-hover-bg: var(--tblr-danger-lt);
+    --tblr-btn-hover-color: var(--tblr-danger);
+    --tblr-btn-active-bg: var(--tblr-danger-lt);
+    --tblr-btn-active-color: var(--tblr-danger);
+    box-shadow: none;
+}
+
+.change-form .jazzy-actions-bottom a[href*="/delete/"] {
+    margin-inline-start: auto;
+}
+
+@media (max-width: 575.98px) {
+    .change-form .form-group > .row > .col-sm-3.col-form-label {
+        flex-basis: 100%;
+        max-width: 100%;
+        padding-top: 0;
+        padding-bottom: .375rem;
+    }
+
+    .change-form #content-main > form > .card > .row > [class*="col-"] > .card > .card-body,
+    .change-form #content-main > form > .card > .jazzy-actions-bottom {
+        padding-inline: 1rem;
+    }
+}
+
+/* select2 writes an inline width; the sheet measure wins. */
+.change-form .form-group .col-sm-9 > .select2-container {
+    width: 100% !important;
+    max-width: var(--jazzy-field-w);
+}
+
+/* Django's split date/time widget: one compact row, timezone note below it. */
+.change-form .form-group .col-sm-9:has(> p.datetime) {
+    display: flex;
+    flex-direction: column;
+}
+
+.change-form p.datetime {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .375rem .5rem;
+    margin: 0;
+}
+
+.change-form p.datetime br {
+    display: none;
+}
+
+.change-form p.datetime > label {
+    color: var(--tblr-secondary);
+    margin: 0;
+}
+
+.change-form p.datetime > label:not(:first-child) {
+    margin-inline-start: .75rem;
+}
+
+.change-form p.datetime > .vDateField {
+    width: 9rem;
+    min-width: 0;
+}
+
+.change-form p.datetime > .vTimeField {
+    width: 7rem;
+    min-width: 0;
+}
+
+.change-form .timezonewarning {
+    order: 2;
+    margin-top: .375rem;
+    font-size: .8125rem;
+    color: var(--tblr-secondary);
+}
+
+/* Changelist footer: result count and pagination get room below the table. */
+#changelist-form .row:has(> .col-7 > .pagination) {
+    align-items: center;
+    margin-top: 0;
+    padding: .875rem 0 0;
+}
+
+/* Single-page change form: an inline section opens with a heading across the sheet, not a caps divider. */
+.change-form #content-main form .card-body > .hr-text {
+    display: block;
+    margin: 1.5rem -1.5rem 0 !important;
+    padding: 1.25rem 1.5rem .25rem;
+    border-top: var(--tblr-border-width) solid var(--tblr-border-color);
+    color: var(--tblr-heading-color);
+    font-size: var(--tblr-font-size-h3);
+    font-weight: var(--tblr-font-weight-headings);
+    line-height: var(--tblr-line-height-h3);
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.change-form #content-main form .card-body > .hr-text::before,
+.change-form #content-main form .card-body > .hr-text::after {
+    content: none;
+}
+
+.change-form #content-main form .card-body > .form-group:has(+ .hr-text) {
+    border-bottom: 0;
+}
 
 /* ============================================================================
    BROWSER UI AND ACCESSIBILITY
@@ -792,5 +1145,9 @@ a.button:hover {
     #jazzy-sidebar :is(.nav-link, .dropdown-item).active {
         outline: 2px solid Highlight;
         outline-offset: -2px;
+    }
+
+    .change-form #content-main .nav-tabs .nav-link.active {
+        border-bottom: 2px solid Highlight;
     }
 }

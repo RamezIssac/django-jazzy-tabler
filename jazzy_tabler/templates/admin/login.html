@@ -68,6 +68,9 @@
             </div>
         </div>
 
+        {# Extension point: hints or a captcha widget above the submit button. #}
+        {% block login_extra %}{% endblock login_extra %}
+
         <div class="form-footer">
             <button type="submit" class="btn {{ jazzy_ui.button_classes.primary }} w-100">
                 {% trans "Log in" %}

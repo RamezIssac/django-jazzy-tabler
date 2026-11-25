@@ -1,0 +1,130 @@
+/* jazzy-tabler skin: minor (Cm7). Muted and introspective: warm paper greys, ink-black actions, quiet borders, no colour noise. */
+
+@font-face {
+    font-family: "Jazzy Inter";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("../../../vendor/fonts/inter/inter-latin-ext-wght-normal.woff2") format("woff2-variations");
+    unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "Jazzy Inter";
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url("../../../vendor/fonts/inter/inter-latin-wght-normal.woff2") format("woff2-variations");
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+[data-jazzy-skin="minor"] {
+    --tblr-gray-50: #fbfaf7;
+    --tblr-gray-100: #f6f4f0;
+    --tblr-gray-200: #eae7e3;
+    --tblr-gray-300: #d7d4d1;
+    --tblr-gray-400: #a3a09c;
+    --tblr-gray-500: #74726e;
+    --tblr-gray-600: #565451;
+    --tblr-gray-700: #42403d;
+    --tblr-gray-800: #2a2825;
+    --tblr-gray-900: #1a1815;
+    --tblr-gray-950: #0b0a09;
+    --tblr-font-sans-serif: "Jazzy Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --tblr-body-font-family: var(--tblr-font-sans-serif);
+    --tblr-body-font-size: 0.875rem;
+    --tblr-font-weight-headings: 600;
+    --tblr-border-radius-scale: 0.67;
+    --tblr-primary: light-dark(#2f2e2b, #ebebea);
+    --tblr-primary-fg: light-dark(#ffffff, #191919);
+    --tblr-link-color: light-dark(#1f6fc5, #5aa5f0);
+    --tblr-link-hover-color: light-dark(#1f6fc5, #5aa5f0);
+    --tblr-body-bg: light-dark(#ffffff, #191919);
+    --tblr-bg-surface: light-dark(#ffffff, #202020);
+    --tblr-bg-surface-primary: #ffffff;
+    --tblr-bg-surface-secondary: light-dark(#ffffff, #191919);
+    --tblr-bg-surface-tertiary: light-dark(#fbfaf7, #191919);
+    --tblr-bg-forms: light-dark(#ffffff, #191919);
+    --tblr-border-color: light-dark(#e9e9e7, #2f2f2f);
+    --tblr-border-color-translucent: light-dark(#e9e9e7, #2f2f2f);
+    --tblr-body-color: light-dark(#37352f, #d4d4d2);
+    --tblr-emphasis-color: light-dark(#191917, #ffffff);
+    --tblr-heading-color: light-dark(#191917, #ffffff);
+    --tblr-secondary: light-dark(#6b6a66, #9b9b98);
+    --tblr-secondary-color: light-dark(#6b6a66, #9b9b98);
+    --tblr-muted: light-dark(#6b6a66, #9b9b98);
+}
+
+[data-jazzy-skin="minor"],
+[data-jazzy-skin="minor"] [data-bs-theme="light"] {
+    --tblr-primary-rgb: 47,46,43;
+    --tblr-link-color-rgb: 31,111,197;
+    --tblr-link-hover-color-rgb: 31,111,197;
+    --tblr-body-bg-rgb: 255,255,255;
+    --tblr-body-color-rgb: 55,53,47;
+}
+
+[data-jazzy-skin="minor"][data-bs-theme="dark"],
+[data-jazzy-skin="minor"] [data-bs-theme="dark"] {
+    --tblr-primary-rgb: 235,235,234;
+    --tblr-link-color-rgb: 90,165,240;
+    --tblr-link-hover-color-rgb: 90,165,240;
+    --tblr-body-bg-rgb: 25,25,25;
+    --tblr-body-color-rgb: 212,212,210;
+}
+
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar {
+    color-scheme: light;
+    --tblr-navbar-bg: #f7f7f5;
+    --tblr-navbar-color: #5f5e5b;
+    --tblr-navbar-hover-color: #191917;
+    --tblr-navbar-active-color: #191917;
+    --tblr-navbar-active-bg: #e9e9e6;
+    --tblr-navbar-brand-color: #191917;
+    --tblr-navbar-brand-hover-color: #191917;
+    --tblr-navbar-border-color: #ececea;
+    --tblr-border-color: #ececea;
+    --tblr-body-color: #5f5e5b;
+    background: #f7f7f5;
+    color: #5f5e5b;
+    accent-color: var(--tblr-link-color);
+}
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .nav-link,
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .dropdown-item { color: #5f5e5b; }
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .nav-link:hover,
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .dropdown-item:hover { color: #191917; background: #efefed; }
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .nav-link.active,
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .dropdown-item.active { color: #191917; background: #e9e9e6; }
+[data-jazzy-skin="minor"]:not([data-bs-theme="dark"]) #jazzy-sidebar .text-muted { color: #5f5e5b !important; }
+
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar {
+    color-scheme: dark;
+    --tblr-navbar-bg: #202020;
+    --tblr-navbar-color: #9b9b98;
+    --tblr-navbar-hover-color: #ffffff;
+    --tblr-navbar-active-color: #ffffff;
+    --tblr-navbar-active-bg: #2c2c2c;
+    --tblr-navbar-brand-color: #ffffff;
+    --tblr-navbar-brand-hover-color: #ffffff;
+    --tblr-navbar-border-color: #2a2a2a;
+    --tblr-border-color: #2a2a2a;
+    --tblr-body-color: #9b9b98;
+    background: #202020;
+    color: #9b9b98;
+    accent-color: var(--tblr-link-color);
+}
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .nav-link,
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .dropdown-item { color: #9b9b98; }
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .nav-link:hover,
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .dropdown-item:hover { color: #ffffff; background: #262626; }
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .nav-link.active,
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .dropdown-item.active { color: #ffffff; background: #2c2c2c; }
+[data-jazzy-skin="minor"][data-bs-theme="dark"] #jazzy-sidebar .text-muted { color: #9b9b98 !important; }
+
+[data-jazzy-skin="minor"] .page-item.active .page-link { color: var(--tblr-primary-fg); }
+
+[data-jazzy-skin="minor"] body { font-size-adjust: from-font; }
+
+[data-jazzy-skin="minor"] .card { --tblr-card-box-shadow: none; }
+[data-jazzy-skin="minor"] .table thead th { text-transform: none; letter-spacing: 0; font-size: .8125rem; }
+[data-jazzy-skin="minor"] .page-title { font-weight: 700; letter-spacing: -0.015em; }

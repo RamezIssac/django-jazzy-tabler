@@ -83,10 +83,31 @@
         });
     }
 
+    // Same mechanism as the mode toggle: an attribute on <html> that the head script stores and restores.
+    function initSkinChooser() {
+        var $choices = $('[data-jazzy-skin-choice]');
+        if (!$choices.length || !window.jazzyChooseSkin) return;
+
+        function markActive() {
+            var current = document.documentElement.getAttribute('data-jazzy-skin') || '';
+            $choices.each(function() {
+                var active = $(this).attr('data-jazzy-skin-choice') === current;
+                $(this).toggleClass('active', active).attr('aria-pressed', active ? 'true' : 'false');
+            });
+        }
+
+        markActive();
+
+        $choices.on('click', function() {
+            if (window.jazzyChooseSkin($(this).attr('data-jazzy-skin-choice'))) markActive();
+        });
+    }
+
     $(document).ready(function() {
         setActiveLinks();
         handleSidebarToggle();
         initDarkModeToggle();
+        initSkinChooser();
 
         // Add table styling to changelist tables that weren't styled
         var $changeListTable = $('#changelist .results table');

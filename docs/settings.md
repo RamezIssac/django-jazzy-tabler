@@ -121,6 +121,8 @@ Default `icons`:
 | `footer_fixed` | `False` | bool — sticky footer. |
 | `default_theme_mode` | `"light"` | `"light"` / `"dark"` / `"auto"` (follows `prefers-color-scheme`). Users can always toggle; their choice is remembered in `localStorage`. |
 | `accent_color` | `"primary"` | Any Tabler color name: `"primary"`, `"azure"`, `"blue"`, `"indigo"`, `"purple"`, `"pink"`, `"red"`, `"orange"`, `"yellow"`, `"lime"`, `"green"`, `"teal"`, `"cyan"`. Colors the sidebar's active item. |
+| `skin` | `None` | One of the [skin names](#skins), or `None` for stock Tabler. An unknown name logs a warning and falls back to stock. A skin sets its own sidebar, navbar and accent colours, so `navbar`, `sidebar` and `accent_color` have no visible effect while it is active. |
+| `skin_chooser` | `False` | bool: a palette menu next to the dark-mode toggle lists "Stock" and every skin. The visitor's pick is kept in `localStorage` (`jazzy-skin`) and applied before first paint; until they pick, `skin` is the default. |
 | `button_classes` | see below | Maps semantic actions to button CSS classes. |
 
 Default `button_classes`:
@@ -133,6 +135,33 @@ Default `button_classes`:
     "warning": "btn-warning",
     "danger": "btn-danger",
     "success": "btn-success",
+}
+```
+
+### Skins
+
+Each skin is one CSS file in `jazzy_tabler/static/jazzy_tabler/css/skins/<name>.css`, scoped to
+`html[data-jazzy-skin="<name>"]` and loaded after the theme stylesheet and before `custom_css`. Skins only
+override Tabler CSS custom properties and a few component rules, so they work in light and dark mode. Fonts
+are bundled (OFL, in `jazzy_tabler/static/vendor/fonts/`) and only the active skin's faces are downloaded.
+
+| Skin | Character |
+|---|---|
+| `major` | Bright and resolved: blurple accent, soft navy ink, airy cards with gentle shadows, white sidebar. Inter. |
+| `minor` | Muted and introspective: warm paper greys, ink-black primary buttons, quiet borders. Inter. |
+| `tritone` | Maximum tension: pure black and white, hairline borders, monospace labels, underlined links, no shadows, black sidebar. Geist. |
+| `sus4` | Suspended calm: 13px type, dense rows, cool greys, hairline borders, one violet accent, light sidebar and a header flush with the page. Inter. |
+| `dominant` | The pull home: black chrome, electric green actions, pill buttons, extra-bold headings. Plus Jakarta Sans. |
+| `harmonic-minor` | Editorial warmth: cream paper, serif headlines, burgundy ink, small-caps table headers, dark plum sidebar. Inter and Source Serif 4. |
+| `lydian` | Dreamy: 12px radii, bright blue, a spectrum stripe over the header, pill-shaped sidebar items. Inter. |
+| `blue-note` | Enterprise: square corners, cobalt accent, charcoal sidebar and header, grey grid table headers. IBM Plex Sans. |
+| `altered` | Developer tool: midnight-violet chrome, magenta gradient buttons, glowing card edges in dark mode, tabular numerals. Geist. |
+| `dorian` | Earthy: green accent, stone greys, tactile buttons with an inset bottom edge, light warm sidebar. Inter. |
+
+```python
+JAZZY_UI_TWEAKS = {
+    "skin": "sus4",          # the default for everyone
+    "skin_chooser": True,    # let each user pick another one
 }
 ```
 

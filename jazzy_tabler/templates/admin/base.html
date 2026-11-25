@@ -5,7 +5,7 @@
 {% get_jazzy_ui_tweaks as jazzy_ui %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}{% if jazzy_ui.skin %} data-jazzy-skin="{{ jazzy_ui.skin }}"{% endif %}
       data-bs-navbar-position="vertical">
 <head>
     <meta charset="utf-8">
@@ -38,6 +38,8 @@
 
     <!-- Django-specific fixes -->
     <link rel="stylesheet" href="{% static "jazzy_tabler/css/main.css" %}">
+
+    {% include "jazzy_tabler/includes/skin_head.html" %}
 
     {% if jazzy_ui.accent_color and jazzy_ui.accent_color != "primary" %}
         <style>
@@ -106,16 +108,11 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                                    aria-label="Open user menu">
-                                    {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                        {% get_user_avatar request.user as avatar_url %}
-                                        {% if avatar_url %}
-                                            <span class="avatar avatar-sm"
-                                                  style="background-image: url({{ avatar_url }})"></span>
-                                        {% else %}
-                                            <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
-                                        {% endif %}
+                                    {% get_user_avatar request.user as avatar_url %}
+                                    {% if avatar_url %}
+                                        <span class="avatar avatar-sm" style="background-image: url({{ avatar_url }})"></span>
                                     {% else %}
-                                        <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                        <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                                     {% endif %}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -138,16 +135,11 @@
 
                             {% if jazzy_settings|has_jazzy_setting:"user_avatar" or True %}
                                 <div class="d-flex align-items-center py-3 d-none d-lg-flex border-bottom mb-3">
-                                    {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                        {% get_user_avatar request.user as avatar_url %}
-                                        {% if avatar_url %}
-                                            <span class="avatar avatar-sm me-2"
-                                                  style="background-image: url({{ avatar_url }})"></span>
-                                        {% else %}
-                                            <span class="avatar avatar-sm me-2"><i class="fas fa-user"></i></span>
-                                        {% endif %}
+                                    {% get_user_avatar request.user as avatar_url %}
+                                    {% if avatar_url %}
+                                        <span class="avatar avatar-sm me-2" style="background-image: url({{ avatar_url }})"></span>
                                     {% else %}
-                                        <span class="avatar avatar-sm me-2"><i class="fas fa-user"></i></span>
+                                        <span class="jazzy-user-icon me-2"><i class="fas fa-cog"></i></span>
                                     {% endif %}
                                     <div class="flex-fill">
                                         {% if perms|can_view_self %}
@@ -308,6 +300,10 @@
                         </div>
                     {% endif %}
 
+                    {% if jazzy_ui.skin_chooser %}
+                        {% include "jazzy_tabler/includes/skin_chooser.html" %}
+                    {% endif %}
+
                     <!-- Dark/Light mode toggle -->
                     <div class="nav-item d-none d-md-flex me-3">
                         <a class="btn btn-ghost-secondary btn-icon" href="#" id="jazzy-mode-toggle"
@@ -321,16 +317,11 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                            aria-label="{% trans 'Account' %}">
-                            {% if jazzy_settings|has_jazzy_setting:"user_avatar" %}
-                                {% get_user_avatar request.user as avatar_url %}
-                                {% if avatar_url %}
-                                    <span class="avatar avatar-sm"
-                                          style="background-image: url({{ avatar_url }})"></span>
-                                {% else %}
-                                    <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
-                                {% endif %}
+                            {% get_user_avatar request.user as avatar_url %}
+                            {% if avatar_url %}
+                                <span class="avatar avatar-sm" style="background-image: url({{ avatar_url }})"></span>
                             {% else %}
-                                <span class="avatar avatar-sm"><i class="fas fa-user"></i></span>
+                                <span class="jazzy-user-icon"><i class="fas fa-cog"></i></span>
                             {% endif %}
                             <div class="d-none d-xl-block ps-2">
                                 <div class="small fw-bold">{{ request.user }}</div>

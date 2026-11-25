@@ -37,6 +37,48 @@ def test_sidebar_visible_and_offsets_content(page, demo_server):
     assert _px(margin) >= box["width"] - 1, f"page content not offset by sidebar (margin-left: {margin})"
 
 
+def test_sidebar_toggle_widens_content_ltr_and_rtl(page, demo_server):
+    """Collapsing the sidebar must let .page-wrapper reclaim its offset.
+
+    Regression: the reset used physical margin-left, a no-op in RTL where
+    Tabler's margin-inline-start is margin-right — the sidebar hid but the
+    main view never widened.
+    """
+    page.goto(f"{demo_server.base_url}/admin/", wait_until="networkidle")
+
+    def wrapper_offset() -> float:
+        return _px(
+            page.evaluate(
+                "getComputedStyle(document.querySelector('.page-wrapper')).marginInlineStart"
+            )
+        )
+
+    def sidebar_width() -> float:
+        return page.evaluate(
+            "document.querySelector('#jazzy-sidebar').getBoundingClientRect().width"
+        )
+
+    for direction in ("ltr", "rtl"):
+        page.evaluate(f"document.documentElement.setAttribute('dir', '{direction}')")
+        page.evaluate("document.querySelector('.page').classList.remove('sidebar-collapsed')")
+        page.wait_for_function(
+            "getComputedStyle(document.querySelector('.page-wrapper')).marginInlineStart !== '0px'"
+        )
+        assert wrapper_offset() >= 200, f"{direction}: expanded sidebar should offset content"
+
+        page.click("#jazzy-sidebar-toggle")
+        page.wait_for_function(
+            "document.querySelector('#jazzy-sidebar').getBoundingClientRect().width === 0"
+        )
+        assert sidebar_width() == 0, f"{direction}: collapsed sidebar should hide"
+        assert wrapper_offset() == 0, (
+            f"{direction}: content did not widen after collapse (margin-inline-start "
+            f"{wrapper_offset()}px)"
+        )
+
+        page.click("#jazzy-sidebar-toggle")  # re-open for the next direction
+
+
 def test_top_navbar_visible(page, demo_server):
     page.goto(f"{demo_server.base_url}/admin/", wait_until="networkidle")
     navbar = page.locator("header.navbar")
