@@ -54,6 +54,7 @@ DATABASES = {
 STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 USE_TZ = True
+TIME_ZONE = "UTC"
 
 JAZZY_SETTINGS = {
     "site_title": "Demo Admin",

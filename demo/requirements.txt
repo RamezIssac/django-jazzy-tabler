@@ -3,4 +3,4 @@ Django>=6.1,<6.2
 django-axes>=8.0
 psycopg[binary]>=3.2
 python-dotenv>=1.0
-sentry-sdk>=2.0
+sentry-sdk>=2.0,<3  # 3.x removed the send_default_pii option demo.settings_hosted passes
