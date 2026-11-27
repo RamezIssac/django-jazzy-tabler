@@ -161,7 +161,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-category-change.png",
-    "bytes": 51490
+    "bytes": 51488
   },
   {
     "mode": "light",
@@ -171,7 +171,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist.png",
-    "bytes": 155458
+    "bytes": 155008
   },
   {
     "mode": "light",
@@ -181,7 +181,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist-search.png",
-    "bytes": 155959
+    "bytes": 155464
   },
   {
     "mode": "light",
@@ -191,7 +191,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist-page2.png",
-    "bytes": 154231
+    "bytes": 152737
   },
   {
     "mode": "light",
@@ -201,7 +201,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-changelist-date-hierarchy.png",
-    "bytes": 166885
+    "bytes": 165759
   },
   {
     "mode": "light",
@@ -211,7 +211,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-add.png",
-    "bytes": 69622
+    "bytes": 69620
   },
   {
     "mode": "light",
@@ -241,7 +241,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-history.png",
-    "bytes": 59456
+    "bytes": 59665
   },
   {
     "mode": "light",
@@ -261,7 +261,7 @@
     "status": 200,
     "console_errors": [],
     "file": "proofs/develop/light/blog-post-add-select2-author-open.png",
-    "bytes": 70408
+    "bytes": 70353
   },
   {
     "mode": "light",
@@ -281,7 +281,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-add-stacked.png",
-    "bytes": 111386
+    "bytes": 111368
   },
   {
     "mode": "light",
@@ -291,7 +291,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/light/blog-post-change-stacked.png",
-    "bytes": 169269
+    "bytes": 169258
   },
   {
     "mode": "dark",
@@ -311,7 +311,7 @@
     "console_errors": [],
     "status": 200,
     "file": "proofs/develop/dark/blog-post-changelist.png",
-    "bytes": 156595
+    "bytes": 156061
   },
   {
     "mode": "dark",
