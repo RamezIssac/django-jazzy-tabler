@@ -72,7 +72,7 @@
 
     function applyExistingDeleteState() {
         $('input[type="checkbox"][name$="-DELETE"]:checked').each(function() {
-            $(this).closest('tr.form-row, div.panel.inline-related').hide();
+            $(this).closest('tr.form-row, div.panel.inline-related').addClass('jazzy-deleted').hide();
         });
     }
 
@@ -101,8 +101,11 @@
 
         $('body').on('click', '.jazzy-delete-btn', function() {
             var $row = $(this).closest('tr.form-row, div.panel.inline-related');
-            $row.find('input[type="checkbox"][name$="-DELETE"]').prop('checked', true);
-            $row.hide();
+            $row.addClass('jazzy-deleted').hide();
+            // A native bubbling event reaches addEventListener and every jQuery copy's .on() handlers.
+            $row.find('input[type="checkbox"][name$="-DELETE"]').prop('checked', true).each(function() {
+                this.dispatchEvent(new Event('change', { bubbles: true }));
+            });
         });
     });
 
